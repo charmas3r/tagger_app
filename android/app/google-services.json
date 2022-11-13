@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "422493089123",
+    "project_id": "planttagger",
+    "storage_bucket": "planttagger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422493089123:android:a7aecfcbdcd885f46ff756",
+        "android_client_info": {
+          "package_name": "com.sdss.planter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422493089123-r1guu9e8r7sk3tpbsru4esg0r6cqus7a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sdss.planter",
+            "certificate_hash": "f7eaff8d162df3c7942af0ea2331d30b5816ccfe"
+          }
+        },
+        {
+          "client_id": "422493089123-sro461vrkfiph7noek2e74tm6a3ob517.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw1gIOkBcAXfMsvWsOJi3hRfZ4oHP4nEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422493089123-sro461vrkfiph7noek2e74tm6a3ob517.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "422493089123-42eeauhdbd0j8gq4h10poerld0bt13g9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.taggerApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
