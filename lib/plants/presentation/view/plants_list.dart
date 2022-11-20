@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tagger_app/plants/logic/bloc/plant_bloc.dart';
 
+import '../../domain/bloc/plant_bloc.dart';
 import '../widgets/bottom_loader.dart';
 import '../widgets/plant_list_item.dart';
 
