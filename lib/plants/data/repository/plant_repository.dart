@@ -4,7 +4,7 @@ import 'package:tagger_app/plants/data/local/local_plant_data_provider.dart';
 import 'package:tagger_app/plants/data/remote/remote_plant_data_provider.dart';
 
 import '../../../core/data/model/result.dart';
-import '../../domain/model/plant.dart';
+import '../../domain/entities/plant.dart';
 
 class PlantRepository {
   const PlantRepository({
@@ -26,13 +26,13 @@ class PlantRepository {
   }
 
   Future<Result> removePlant(int plantId) async {
-    final Result remoteResult = await remoteDataProvider.deletePlant(plantId);
+    // final Result remoteResult = await remoteDataProvider.deletePlant(plantId);
     final Result localResult = await localDataProvider.deletePlant(plantId);
     return localResult;
   }
 
   Future<Result> createPlant(Plant plant) async {
-    final Result remoteResult = await remoteDataProvider.createPlant(plant);
+    // final Result remoteResult = await remoteDataProvider.createPlant(plant);
     final Result localResult = await localDataProvider.createPlant(plant);
     return localResult;
   }

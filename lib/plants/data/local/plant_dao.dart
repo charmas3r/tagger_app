@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 
-import '../../domain/model/plant.dart';
+import '../../domain/entities/plant.dart';
 
 @dao
 abstract class PlantDao {
@@ -10,6 +10,6 @@ abstract class PlantDao {
   @Query('SELECT * FROM Plant WHERE id = :id')
   Stream<Plant?> findPersonById(int id);
 
-  @insert
-  Future<void> insertPlant(Plant person);
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertPlant(Plant plant);
 }

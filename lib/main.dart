@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/resources/theme.dart';
 
-import 'di/injector.dart';
 import 'core/bloc/simple_bloc_observer.dart';
+import 'core/di/injector.dart';
 import 'main/presentation/navigation/router/AppRouter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
-  initDependencies();
-
+  await initDependencies();
   runApp(MyApp(
     appRouter: AppRouter(),
   ));

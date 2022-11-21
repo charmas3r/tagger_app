@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/model/plant.dart';
+import '../../domain/entities/plant.dart';
 
 class PlantListItem extends StatelessWidget {
   const PlantListItem({Key? key, required this.plant}): super(key: key);

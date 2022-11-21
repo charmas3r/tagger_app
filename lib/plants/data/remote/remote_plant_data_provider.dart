@@ -1,6 +1,6 @@
 
 import '../../../core/data/model/result.dart';
-import '../../domain/model/plant.dart';
+import '../../domain/entities/plant.dart';
 import '../base/base_plant_data_provider.dart';
 
 class RemotePlantDataProvider extends BasePlantDataProvider {

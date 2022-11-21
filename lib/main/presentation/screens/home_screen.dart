@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tagger_app/plants/presentation/view/plants_page.dart';
 import 'package:tagger_app/utils/logging_utils.dart';
 
+import '../../../plants/presentation/view/plants_page.dart';
 import '../../../qr/presentation/pages/qr_scanning_page.dart';
 import '../navigation/model/pages.dart';
+import '../navigation/model/routes.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title})
@@ -78,6 +79,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.addPlantRoute);
+        },
+        label: const Text('Add'),
+        icon: const Icon(Icons.add),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

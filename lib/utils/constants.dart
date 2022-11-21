@@ -1,0 +1,1 @@
+const String kDatabaseName = 'app_database.db';
