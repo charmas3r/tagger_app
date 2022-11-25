@@ -5,6 +5,7 @@ import 'package:tagger_app/plants/data/repository/plant_repository.dart';
 import 'package:tagger_app/plants/presentation/bloc/plant_bloc.dart';
 
 import '../../plants/domain/usecase/create_plant_use_case.dart';
+import '../../plants/domain/usecase/get_saved_plant_by_id_use_case.dart';
 import '../../plants/domain/usecase/get_saved_plants_use_case.dart';
 import '../../utils/constants.dart';
 import '../data/db/app_database.dart';
@@ -35,12 +36,16 @@ Future<void> initDependencies() async {
   injector.registerSingleton<CreatePlantUseCase>(
       CreatePlantUseCase(plantRepository: injector())
   );
+  injector.registerSingleton<GetSavedPlantByIdUseCase>(
+      GetSavedPlantByIdUseCase(plantRepository: injector())
+  );
 
   // blocs
   injector.registerFactory<PlantBloc>(
         () => PlantBloc(
             getSavedPlantsUseCase: injector(),
-            createPlantUseCase: injector()
+            createPlantUseCase: injector(),
+            getSavedPlantByIdUseCase: injector(),
         ),
   );
 }

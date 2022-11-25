@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../plants/presentation/screens/add_plant_screen.dart';
+import 'package:tagger_app/plants/presentation/view/edit_plant_screen.dart';
+import '../../../../plants/presentation/view/add_plant_screen.dart';
 import '../../screens/home_screen.dart';
 import '../model/routes.dart';
 
@@ -16,6 +17,14 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => const AddPlantScreen(
                 title: "Add Plant Screen"
+            )
+        );
+      case Routes.editPlantRoute:
+        final args = settings.arguments as EditPlantScreenArguments;
+        return MaterialPageRoute(
+            builder: (_) => EditPlantScreen(
+                title: "Edit Plant Screen",
+                plantId: args.plantId,
             )
         );
       default:

@@ -16,12 +16,14 @@ class PlantRepository {
   final LocalPlantDataProvider localDataProvider;
 
   Future<List<Plant>> fetchAllPlants() async {
+    log("attempting to fetch plants");
     final List<Plant> remoteDataset = await remoteDataProvider.fetchPlants();
     final Result localUpdate = await localDataProvider.addAll(remoteDataset);
     if (localUpdate == Result.failed) {
       log("There's been an error fetching from remote, attempting to return local dataset");
     }
     final List<Plant> localDataset = await localDataProvider.fetchPlants();
+    log("current plants in db: $localDataset");
     return localDataset;
   }
 
@@ -32,8 +34,14 @@ class PlantRepository {
   }
 
   Future<Result> createPlant(Plant plant) async {
+    log("attempting to create plant in db");
     // final Result remoteResult = await remoteDataProvider.createPlant(plant);
     final Result localResult = await localDataProvider.createPlant(plant);
+    log("result of db operation: $localResult");
     return localResult;
+  }
+
+  Future<Plant?> getPlantByUniqueId(int plantId) async {
+    return await localDataProvider.getPlantByUniqueId(plantId);
   }
 }

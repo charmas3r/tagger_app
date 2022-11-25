@@ -103,12 +103,12 @@ class _$PlantDao extends PlantDao {
   _$PlantDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database, changeListener),
+  )   : _queryAdapter = QueryAdapter(database),
         _plantInsertionAdapter = InsertionAdapter(
             database,
             'Plant',
-            (Plant item) => <String, Object?>{'id': item.id, 'name': item.name},
-            changeListener);
+            (Plant item) =>
+                <String, Object?>{'id': item.id, 'name': item.name});
 
   final sqflite.DatabaseExecutor database;
 
@@ -126,17 +126,15 @@ class _$PlantDao extends PlantDao {
   }
 
   @override
-  Stream<Plant?> findPersonById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM Plant WHERE id = ?1',
+  Future<Plant?> findPlantByUniqueId(int id) async {
+    return _queryAdapter.query('SELECT * FROM Plant WHERE id = ?1',
         mapper: (Map<String, Object?> row) =>
             Plant(row['id'] as int, row['name'] as String),
-        arguments: [id],
-        queryableName: 'Plant',
-        isView: false);
+        arguments: [id]);
   }
 
   @override
-  Future<void> insertPlant(Plant person) async {
-    await _plantInsertionAdapter.insert(person, OnConflictStrategy.replace);
+  Future<void> insertPlant(Plant plant) async {
+    await _plantInsertionAdapter.insert(plant, OnConflictStrategy.replace);
   }
 }

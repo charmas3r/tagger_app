@@ -48,4 +48,8 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   Future<Result> addAll(List<Plant> plant) async {
     return Result.success;
   }
+
+  Future<Plant?> getPlantByUniqueId(int plantId) {
+    return plantDao.findPlantByUniqueId(plantId);
+  }
 }

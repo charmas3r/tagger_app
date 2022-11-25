@@ -8,7 +8,7 @@ abstract class PlantDao {
   Future<List<Plant>> findAllPlants();
 
   @Query('SELECT * FROM Plant WHERE id = :id')
-  Stream<Plant?> findPersonById(int id);
+  Future<Plant?> findPlantByUniqueId(int id);
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertPlant(Plant plant);

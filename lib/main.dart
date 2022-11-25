@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tagger_app/plants/presentation/bloc/plant_bloc.dart';
 import 'package:tagger_app/resources/theme.dart';
 
 import 'core/bloc/simple_bloc_observer.dart';
@@ -25,10 +26,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: PlantTheme.lightTheme,
-      onGenerateRoute: appRouter.onGenerateRoute,
+    return BlocProvider<PlantBloc>(
+      create: (_) => injector()..add(const FetchPlantsRequested()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: PlantTheme.lightTheme,
+        onGenerateRoute: appRouter.onGenerateRoute,
+      ),
     );
   }
 }

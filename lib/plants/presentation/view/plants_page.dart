@@ -1,23 +1,71 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tagger_app/plants/presentation/view/plants_list.dart';
 
-import '../../../core/di/injector.dart';
 import '../bloc/plant_bloc.dart';
+import '../widgets/bottom_loader.dart';
+import '../widgets/plant_list_item.dart';
 
 class PlantsPage extends StatefulWidget {
-  const PlantsPage({Key? key}) : super(key: key);
+  const PlantsPage({Key? key}): super(key: key);
 
   @override
-  _PlantsPageState createState() => _PlantsPageState();
+  State<PlantsPage> createState() => _PlantsPageState();
 }
 
 class _PlantsPageState extends State<PlantsPage> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PlantBloc>(
-    create: (_) => injector()..add(const PlantFetched()),
-    child: const PlantsList(),
+    return BlocBuilder<PlantBloc, PlantState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case PlantStatus.failure:
+            return const Center(child: Text('failed to fetch plants'));
+          case PlantStatus.success:
+            if (state.plants.isEmpty) {
+              return const Center(child: Text('no plants'));
+            }
+            return ListView.builder(
+              itemCount: state.plants.length,
+              itemBuilder: (BuildContext context, int index) {
+                return PlantListItem(plant: state.plants[index]);
+              },
+              controller: _scrollController,
+            );
+          case PlantStatus.initial:
+            return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
+  }
+
+  Future<void> _onRefresh(BuildContext context) async {
+    context.read<PlantBloc>().add(const FetchPlantsRequested());
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) context.read<PlantBloc>().add(const FetchPlantsRequested());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
   }
 }

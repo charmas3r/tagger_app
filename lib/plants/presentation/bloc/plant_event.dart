@@ -6,12 +6,21 @@ abstract class PlantEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PlantFetched extends PlantEvent {
-  const PlantFetched();
+class FetchPlantsRequested extends PlantEvent {
+  const FetchPlantsRequested();
 }
-class PlantSaved extends PlantEvent {
+
+class FetchPlantRequested extends PlantEvent {
+  final int id;
+  const FetchPlantRequested(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
+class SavePlantRequested extends PlantEvent {
   final Plant plant;
-  const PlantSaved(this.plant);
+  const SavePlantRequested(this.plant);
 
   @override
   List<Object> get props => [plant];

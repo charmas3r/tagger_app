@@ -6,56 +6,69 @@ import 'package:tagger_app/plants/domain/usecase/get_saved_plants_use_case.dart'
 
 import '../../../core/bloc/bloc_with_state.dart';
 import '../../domain/entities/plant.dart';
+import '../../domain/usecase/get_saved_plant_by_id_use_case.dart';
 
 part 'plant_event.dart';
+
 part 'plant_state.dart';
 
 class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
   final GetSavedPlantsUseCase getSavedPlantsUseCase;
   final CreatePlantUseCase createPlantUseCase;
+  final GetSavedPlantByIdUseCase getSavedPlantByIdUseCase;
 
   PlantBloc({
     required this.getSavedPlantsUseCase,
     required this.createPlantUseCase,
+    required this.getSavedPlantByIdUseCase,
   }) : super(const PlantState()) {
-    on<PlantFetched>(_onPlantsFetched);
-    on<PlantSaved>(_onPlantSaved);
+    on<FetchPlantsRequested>(_onPlantsFetched);
+    on<FetchPlantRequested>(_onPlantFetched);
+    on<SavePlantRequested>(_onPlantSaved);
   }
 
-  Future<void> _onPlantsFetched(PlantFetched event, Emitter<PlantState> emit) async {
-    if (state.hasReachedMax) return;
+  Future<void> _onPlantsFetched(
+      FetchPlantsRequested event, Emitter<PlantState> emit) async {
     try {
-      if (state.status == PlantStatus.initial) {
-        final plants = await getSavedPlantsUseCase.call();
-        return emit(state.copyWith(
-            status: PlantStatus.success,
-            plants: plants,
-            hasReachedMax: false,
-        ));
-      }
-      final plants = await _fetchPlants(state.plants.length);
-      return emit(plants.isEmpty
-          ? state.copyWith(hasReachedMax: true)
-          : state.copyWith(
+      final plants = await getSavedPlantsUseCase.call();
+      return emit(PlantState(
         status: PlantStatus.success,
-        plants: List.of(state.plants)..addAll(plants),
-        hasReachedMax: false,
+        plants: plants,
       ));
     } catch (_) {
-      return emit(state.copyWith(status: PlantStatus.failure));
+      return emit(const PlantState(status: PlantStatus.failure));
     }
   }
 
-  Future<void> _onPlantSaved(PlantSaved event, Emitter<PlantState> emit) async {
-    final result = await createPlantUseCase.call(params: event.plant);
-    if (result == Result.success) {
-      return emit(state.copyWith(status: PlantStatus.success));
-    } else {
-      return emit(state.copyWith(status: PlantStatus.failure));
+  Future<void> _onPlantFetched(
+      FetchPlantRequested event, Emitter<PlantState> emit) async {
+    try {
+      final plant = await getSavedPlantByIdUseCase.call(params: event.id);
+      if (plant != null) {
+        List<Plant> plants = <Plant>[plant];
+        return emit(PlantState(
+          status: PlantStatus.success,
+          plants: plants,
+        ));
+      } else {
+        return emit(const PlantState(status: PlantStatus.failure));
+      }
+    } catch (_) {
+      return emit(const PlantState(status: PlantStatus.failure));
     }
   }
 
-  Future<List<Plant>> _fetchPlants([int startIndex = 0]) async {
-    return await getSavedPlantsUseCase.call();
+  Future<void> _onPlantSaved(
+      SavePlantRequested event, Emitter<PlantState> emit) async {
+    try {
+      final result = await createPlantUseCase.call(params: event.plant);
+      if (result == Result.success) {
+        return emit(const PlantState(status: PlantStatus.success));
+      } else {
+        return emit(const PlantState(status: PlantStatus.failure));
+      }
+    } catch (_) {
+      return emit(const PlantState(status: PlantStatus.failure));
+    }
   }
 }
