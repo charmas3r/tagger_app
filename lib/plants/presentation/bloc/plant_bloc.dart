@@ -7,6 +7,7 @@ import 'package:tagger_app/plants/domain/usecase/get_saved_plants_use_case.dart'
 import '../../../core/bloc/bloc_with_state.dart';
 import '../../domain/entities/plant.dart';
 import '../../domain/usecase/get_saved_plant_by_id_use_case.dart';
+import '../../domain/usecase/update_plant_use_case.dart';
 
 part 'plant_event.dart';
 
@@ -16,19 +17,22 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
   final GetSavedPlantsUseCase getSavedPlantsUseCase;
   final CreatePlantUseCase createPlantUseCase;
   final GetSavedPlantByIdUseCase getSavedPlantByIdUseCase;
+  final UpdatePlantUseCase updatePlantUseCase;
 
   PlantBloc({
     required this.getSavedPlantsUseCase,
     required this.createPlantUseCase,
     required this.getSavedPlantByIdUseCase,
+    required this.updatePlantUseCase,
   }) : super(const PlantState()) {
     on<FetchPlantsRequested>(_onPlantsFetched);
     on<FetchPlantRequested>(_onPlantFetched);
     on<SavePlantRequested>(_onPlantSaved);
+    on<UpdatePlantRequested>(_onPlantUpdated);
   }
 
-  Future<void> _onPlantsFetched(
-      FetchPlantsRequested event, Emitter<PlantState> emit) async {
+  Future<void> _onPlantsFetched(FetchPlantsRequested event,
+      Emitter<PlantState> emit) async {
     try {
       final plants = await getSavedPlantsUseCase.call();
       return emit(PlantState(
@@ -40,8 +44,8 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
     }
   }
 
-  Future<void> _onPlantFetched(
-      FetchPlantRequested event, Emitter<PlantState> emit) async {
+  Future<void> _onPlantFetched(FetchPlantRequested event,
+      Emitter<PlantState> emit) async {
     try {
       final plant = await getSavedPlantByIdUseCase.call(params: event.id);
       if (plant != null) {
@@ -58,12 +62,30 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
     }
   }
 
-  Future<void> _onPlantSaved(
-      SavePlantRequested event, Emitter<PlantState> emit) async {
+  Future<void> _onPlantSaved(SavePlantRequested event,
+      Emitter<PlantState> emit) async {
     try {
       final result = await createPlantUseCase.call(params: event.plant);
       if (result == Result.success) {
         return emit(const PlantState(status: PlantStatus.success));
+      } else {
+        return emit(const PlantState(status: PlantStatus.failure));
+      }
+    } catch (_) {
+      return emit(const PlantState(status: PlantStatus.failure));
+    }
+  }
+
+  Future<void> _onPlantUpdated(UpdatePlantRequested event,
+      Emitter<PlantState> emit) async {
+    try {
+      final updatedPlant = await updatePlantUseCase.call(params: event.plant);
+      if (updatedPlant != null) {
+        List<Plant> plants = <Plant>[updatedPlant];
+        return emit(PlantState(
+          status: PlantStatus.success,
+          plants: plants,
+        ));
       } else {
         return emit(const PlantState(status: PlantStatus.failure));
       }

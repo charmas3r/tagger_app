@@ -7,8 +7,8 @@ abstract class BasePlantDataProvider {
   Future<Result> createPlant(Plant plant) async {
     return Result.success;
   }
-  Future<Result> updatePlant(Plant plant) async {
-    return Result.success;
+  Future<Plant?> updatePlant(Plant plant) async {
+    return null;
   }
   Future<List<Plant>> fetchPlants() async {
     return List.empty();

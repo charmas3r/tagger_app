@@ -25,15 +25,23 @@ class _AddPlantScreen extends State<AddPlantScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(nickNameEditController, context),
-    );
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: _buildBody(nickNameEditController, context),
+        ));
   }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: const Text("Add Plant Screen"),
+      leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<PlantBloc>().add(const FetchPlantsRequested());
+            Navigator.of(context).pop();
+          }),
     );
   }
 
@@ -70,8 +78,14 @@ class _AddPlantScreen extends State<AddPlantScreen> {
             generateUniquePrimaryId(),
             textEditingController.text,
           );
-          context.read<PlantBloc>().add(SavePlantRequested(plant));
-          context.read<PlantBloc>().add(const FetchPlantsRequested());
+          context
+              .read<PlantBloc>()
+              .add(SavePlantRequested(plant)
+          );
+          context
+              .read<PlantBloc>()
+              .add(const FetchPlantsRequested()
+          );
           Navigator.pop(context);
         },
         child: const Text("Save Plant"),
@@ -85,10 +99,12 @@ class _AddPlantScreen extends State<AddPlantScreen> {
   ) {
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         textEditingController.text = "";
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SizedBox(
             height: 240,
             child: Column(

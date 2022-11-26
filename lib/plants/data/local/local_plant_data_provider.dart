@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:tagger_app/plants/data/local/plant_dao.dart';
 
 import '../../../core/data/model/result.dart';
@@ -19,11 +21,13 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   }
 
   @override
-  Future<Result> updatePlant(Plant plant) async {
+  Future<Plant?> updatePlant(Plant plant) async {
     try {
-      return Result.success;
+      await plantDao.updatePlant(plant);
+      return plant;
     } catch (e) {
-      return Result.failed;
+      log("Error in updating the plant, returning null instead");
+      return null;
     }
   }
 

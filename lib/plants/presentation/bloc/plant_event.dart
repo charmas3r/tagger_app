@@ -25,3 +25,11 @@ class SavePlantRequested extends PlantEvent {
   @override
   List<Object> get props => [plant];
 }
+
+class UpdatePlantRequested extends PlantEvent {
+  final Plant plant;
+  const UpdatePlantRequested(this.plant);
+
+  @override
+  List<Object> get props => [plant];
+}

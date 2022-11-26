@@ -108,6 +108,12 @@ class _$PlantDao extends PlantDao {
             database,
             'Plant',
             (Plant item) =>
+                <String, Object?>{'id': item.id, 'name': item.name}),
+        _plantUpdateAdapter = UpdateAdapter(
+            database,
+            'Plant',
+            ['id'],
+            (Plant item) =>
                 <String, Object?>{'id': item.id, 'name': item.name});
 
   final sqflite.DatabaseExecutor database;
@@ -117,6 +123,8 @@ class _$PlantDao extends PlantDao {
   final QueryAdapter _queryAdapter;
 
   final InsertionAdapter<Plant> _plantInsertionAdapter;
+
+  final UpdateAdapter<Plant> _plantUpdateAdapter;
 
   @override
   Future<List<Plant>> findAllPlants() async {
@@ -136,5 +144,10 @@ class _$PlantDao extends PlantDao {
   @override
   Future<void> insertPlant(Plant plant) async {
     await _plantInsertionAdapter.insert(plant, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> updatePlant(Plant plant) async {
+    await _plantUpdateAdapter.update(plant, OnConflictStrategy.replace);
   }
 }
