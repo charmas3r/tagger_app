@@ -12,4 +12,10 @@ abstract class PlantDao {
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertPlant(Plant plant);
+
+  @Update(onConflict: OnConflictStrategy.replace)
+  Future<void> updatePlant(Plant plant);
+
+  @Query('DELETE FROM Plant WHERE id = :id')
+  Future<Plant?> deletePlant(int id);
 }

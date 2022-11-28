@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
@@ -15,7 +17,7 @@ class AddPlantScreen extends StatefulWidget {
 }
 
 class _AddPlantScreen extends State<AddPlantScreen> {
-  final nickNameEditController = TextEditingController(text: "Plant nickname");
+  final nickNameEditController = TextEditingController();
 
   @override
   void dispose() {
@@ -25,15 +27,23 @@ class _AddPlantScreen extends State<AddPlantScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(nickNameEditController, context),
-    );
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: _buildBody(nickNameEditController, context),
+        ));
   }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: const Text("Add Plant Screen"),
+      leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<PlantBloc>().add(const FetchPlantsRequested());
+            Navigator.of(context).pop();
+          }),
     );
   }
 
@@ -51,13 +61,16 @@ class _AddPlantScreen extends State<AddPlantScreen> {
     TextEditingController textEditingController,
     BuildContext context,
   ) {
+    String initialTextTitle = textEditingController.text.isEmpty
+        ? "Choose a nickname"
+        : textEditingController.text;
     return [
       const ListTile(
         title: Text("General"),
         dense: true,
       ),
       ListTile(
-        title: Text(textEditingController.text),
+        title: Text(initialTextTitle),
         trailing: const Icon(Icons.edit),
         onTap: () {
           _showEditPlantBottomSheet(textEditingController, context);
@@ -85,10 +98,14 @@ class _AddPlantScreen extends State<AddPlantScreen> {
   ) {
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        textEditingController.text = "";
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.only(
+              top: 24,
+              right: 24,
+              left: 24,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SizedBox(
             height: 240,
             child: Column(
@@ -101,7 +118,7 @@ class _AddPlantScreen extends State<AddPlantScreen> {
                   controller: textEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Plant Nickname',
-                    hintText: 'Beauty Factory',
+                    hintText: 'Enter a name',
                   ),
                 ),
                 const SizedBox(height: 32),

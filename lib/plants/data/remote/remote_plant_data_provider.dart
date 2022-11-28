@@ -10,8 +10,8 @@ class RemotePlantDataProvider extends BasePlantDataProvider {
   }
 
   @override
-  Future<Result> updatePlant(Plant plant) async {
-    return Result.success;
+  Future<Plant?> updatePlant(Plant plant) async {
+    return null;
   }
 
   @override

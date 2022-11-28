@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
@@ -29,30 +31,79 @@ class _EditPlantScreen extends State<EditPlantScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<PlantBloc>().add(FetchPlantRequested(plantId));
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(nickNameEditController, context),
-    );
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: _buildAppBar(context),
+          body: _buildBody(nickNameEditController, context),
+        ));
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: const Text("Edit Plant Screen"),
+      leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<PlantBloc>().add(const FetchPlantsRequested());
+            Navigator.of(context).pop();
+          }),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.delete,
+          ),
+          onPressed: () {
+            _showAlertDialog(plantId, context);
+          },
+        ),
+      ],
     );
   }
 
-  Widget _buildBody(
-    TextEditingController textEditingController,
-    BuildContext context,
-  ) {
-    return BlocBuilder<PlantBloc, PlantState>(builder: (context, state) {
+  void _showAlertDialog(int plantId, BuildContext pageContext) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: const Text('AlertDialog Title'),
+            content: const Text('AlertDialog description'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<PlantBloc>().add(RemovePlantRequested(plantId));
+                  context.read<PlantBloc>().add(const FetchPlantsRequested());
+                  Navigator.pop(context, 'OK');
+                  Navigator.pop(pageContext);
+                },
+                child: const Text('Ok'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  Widget _buildBody(TextEditingController textEditingController,
+      BuildContext context,) {
+    return BlocConsumer<PlantBloc, PlantState>(listenWhen: (context, state) {
+      return state.status == PlantStatus.success;
+    }, listener: (context, state) {
+      if (state.plants.isNotEmpty) {
+        textEditingController.text = state.plants.first.name;
+      }
+    }, builder: (context, state) {
       switch (state.status) {
         case PlantStatus.failure:
           return const Center(child: Text('failed to fetch plant'));
         case PlantStatus.success:
           return ListView(
             padding: const EdgeInsets.all(8),
-            children: _buildChildren(textEditingController, context, state.plants.first),
+            children: _buildChildren(
+                textEditingController, context, state.plants.first),
           );
         case PlantStatus.initial:
           return const Center(child: CircularProgressIndicator());
@@ -60,12 +111,9 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     });
   }
 
-  List<Widget> _buildChildren(
-    TextEditingController textEditingController,
-    BuildContext context,
-    Plant plant,
-  ) {
-    textEditingController.text = plant.name;
+  List<Widget> _buildChildren(TextEditingController textEditingController,
+      BuildContext context,
+      Plant plant,) {
     return [
       const ListTile(
         title: Text("General"),
@@ -81,17 +129,22 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     ];
   }
 
-  void _showEditPlantBottomSheet(
-    TextEditingController textEditingController,
-    BuildContext context,
-      Plant plant,
-  ) {
+  void _showEditPlantBottomSheet(TextEditingController textEditingController,
+      BuildContext context,
+      Plant plant,) {
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        textEditingController.text = plant.name;
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.only(
+              top: 24,
+              right: 24,
+              left: 24,
+              bottom: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom),
           child: SizedBox(
             height: 240,
             child: Column(
@@ -110,6 +163,10 @@ class _EditPlantScreen extends State<EditPlantScreen> {
                 ElevatedButton(
                     child: const Text('Save'),
                     onPressed: () {
+                      Plant copy = plant.copyWith(
+                        name: textEditingController.text,
+                      );
+                      context.read<PlantBloc>().add(UpdatePlantRequested(copy));
                       Navigator.pop(context);
                     }),
               ],

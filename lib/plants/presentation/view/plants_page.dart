@@ -1,12 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tagger_app/plants/domain/entities/plant.dart';
 
 import '../bloc/plant_bloc.dart';
 import '../widgets/bottom_loader.dart';
 import '../widgets/plant_list_item.dart';
 
 class PlantsPage extends StatefulWidget {
-  const PlantsPage({Key? key}): super(key: key);
+  const PlantsPage({Key? key}) : super(key: key);
 
   @override
   State<PlantsPage> createState() => _PlantsPageState();
@@ -18,6 +21,7 @@ class _PlantsPageState extends State<PlantsPage> {
   @override
   void initState() {
     super.initState();
+    log("init state");
     _scrollController.addListener(_onScroll);
   }
 
@@ -32,12 +36,17 @@ class _PlantsPageState extends State<PlantsPage> {
             if (state.plants.isEmpty) {
               return const Center(child: Text('no plants'));
             }
-            return ListView.builder(
-              itemCount: state.plants.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PlantListItem(plant: state.plants[index]);
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<PlantBloc>().add(const FetchPlantsRequested());
               },
-              controller: _scrollController,
+              child: ListView.builder(
+                itemCount: state.plants.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return PlantListItem(plant: state.plants[index]);
+                },
+                controller: _scrollController,
+              ),
             );
           case PlantStatus.initial:
             return const Center(child: CircularProgressIndicator());

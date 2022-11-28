@@ -41,6 +41,14 @@ class PlantRepository {
     return localResult;
   }
 
+  Future<Plant?> updatePlant(Plant plant) async {
+    log("attempting to update plant in db");
+    // final Result remoteResult = await remoteDataProvider.createPlant(plant);
+    final Plant? localResult = await localDataProvider.updatePlant(plant);
+    log("result of db operation: $localResult");
+    return localResult;
+  }
+
   Future<Plant?> getPlantByUniqueId(int plantId) async {
     return await localDataProvider.getPlantByUniqueId(plantId);
   }

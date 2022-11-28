@@ -12,7 +12,9 @@ void main() {
       plantBloc = PlantBloc(
           getSavedPlantsUseCase: injector(),
           createPlantUseCase: injector(),
-          getSavedPlantByIdUseCase: injector());
+          getSavedPlantByIdUseCase: injector(),
+          updatePlantUseCase: injector(),
+          removePlantUseCase: injector());
     });
 
     test('initial state status is initial', () {
