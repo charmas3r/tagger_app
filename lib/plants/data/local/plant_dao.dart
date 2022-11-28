@@ -15,4 +15,7 @@ abstract class PlantDao {
 
   @Update(onConflict: OnConflictStrategy.replace)
   Future<void> updatePlant(Plant plant);
+
+  @Query('DELETE FROM Plant WHERE id = :id')
+  Future<Plant?> deletePlant(int id);
 }

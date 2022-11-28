@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
@@ -15,7 +17,7 @@ class AddPlantScreen extends StatefulWidget {
 }
 
 class _AddPlantScreen extends State<AddPlantScreen> {
-  final nickNameEditController = TextEditingController(text: "Plant nickname");
+  final nickNameEditController = TextEditingController();
 
   @override
   void dispose() {
@@ -59,13 +61,16 @@ class _AddPlantScreen extends State<AddPlantScreen> {
     TextEditingController textEditingController,
     BuildContext context,
   ) {
+    String initialTextTitle = textEditingController.text.isEmpty
+        ? "Choose a nickname"
+        : textEditingController.text;
     return [
       const ListTile(
         title: Text("General"),
         dense: true,
       ),
       ListTile(
-        title: Text(textEditingController.text),
+        title: Text(initialTextTitle),
         trailing: const Icon(Icons.edit),
         onTap: () {
           _showEditPlantBottomSheet(textEditingController, context);
@@ -78,14 +83,8 @@ class _AddPlantScreen extends State<AddPlantScreen> {
             generateUniquePrimaryId(),
             textEditingController.text,
           );
-          context
-              .read<PlantBloc>()
-              .add(SavePlantRequested(plant)
-          );
-          context
-              .read<PlantBloc>()
-              .add(const FetchPlantsRequested()
-          );
+          context.read<PlantBloc>().add(SavePlantRequested(plant));
+          context.read<PlantBloc>().add(const FetchPlantsRequested());
           Navigator.pop(context);
         },
         child: const Text("Save Plant"),
@@ -101,9 +100,11 @@ class _AddPlantScreen extends State<AddPlantScreen> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        textEditingController.text = "";
         return Padding(
           padding: EdgeInsets.only(
+              top: 24,
+              right: 24,
+              left: 24,
               bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SizedBox(
             height: 240,
@@ -117,7 +118,7 @@ class _AddPlantScreen extends State<AddPlantScreen> {
                   controller: textEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Plant Nickname',
-                    hintText: 'Beauty Factory',
+                    hintText: 'Enter a name',
                   ),
                 ),
                 const SizedBox(height: 32),

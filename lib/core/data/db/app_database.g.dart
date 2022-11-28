@@ -142,6 +142,14 @@ class _$PlantDao extends PlantDao {
   }
 
   @override
+  Future<Plant?> deletePlant(int id) async {
+    return _queryAdapter.query('DELETE FROM Plant WHERE id = ?1',
+        mapper: (Map<String, Object?> row) =>
+            Plant(row['id'] as int, row['name'] as String),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertPlant(Plant plant) async {
     await _plantInsertionAdapter.insert(plant, OnConflictStrategy.replace);
   }

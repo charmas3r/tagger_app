@@ -43,7 +43,8 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   @override
   Future<Result> deletePlant(int plantId) async {
     try {
-      return Result.success;
+      var deletedItem = await plantDao.deletePlant(plantId);
+      return deletedItem != null ? Result.success : Result.failed;
     } catch (e) {
       return Result.failed;
     }

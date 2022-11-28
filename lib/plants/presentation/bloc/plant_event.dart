@@ -18,6 +18,14 @@ class FetchPlantRequested extends PlantEvent {
   List<Object> get props => [id];
 }
 
+class RemovePlantRequested extends PlantEvent {
+  final int id;
+  const RemovePlantRequested(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class SavePlantRequested extends PlantEvent {
   final Plant plant;
   const SavePlantRequested(this.plant);

@@ -13,7 +13,8 @@ void main() {
           getSavedPlantsUseCase: injector(),
           createPlantUseCase: injector(),
           getSavedPlantByIdUseCase: injector(),
-          updatePlantUseCase: injector());
+          updatePlantUseCase: injector(),
+          removePlantUseCase: injector());
     });
 
     test('initial state status is initial', () {
