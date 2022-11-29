@@ -2,8 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
 import 'package:tagger_app/plants/domain/entities/identification.dart';
 
-import 'origin.dart';
-
 @entity
 class Plant extends Equatable {
   @primaryKey
@@ -12,7 +10,6 @@ class Plant extends Equatable {
   final Identification identification;
   final int createDate;
   final int acquireDate;
-  final Origin origin;
 
   const Plant(
     this.id,
@@ -20,7 +17,6 @@ class Plant extends Equatable {
     this.identification,
     this.createDate,
     this.acquireDate,
-    this.origin,
   );
 
   Plant copyWith({
@@ -29,7 +25,6 @@ class Plant extends Equatable {
     Identification? identification,
     int? createDate,
     int? acquireDate,
-    Origin? origin,
   }) {
     return Plant(
       id ?? this.id,
@@ -37,7 +32,6 @@ class Plant extends Equatable {
       identification ?? this.identification,
       createDate ?? this.createDate,
       acquireDate ?? this.acquireDate,
-      origin ?? this.origin,
     );
   }
 
@@ -48,7 +42,6 @@ class Plant extends Equatable {
         identification,
         createDate,
         acquireDate,
-        origin,
       ];
 
   @override
@@ -60,7 +53,6 @@ class Plant extends Equatable {
         identification: ${identification.toString()}
         createDate: $createDate,
         acquireDate: $acquireDate,
-        origin: $origin,
       }
     ''';
   }
