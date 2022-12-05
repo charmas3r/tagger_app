@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import 'package:flutter/material.dart';
+import 'package:objectbox/objectbox.dart';
 
 enum Material {
   plastic,
@@ -8,25 +9,18 @@ enum Material {
   cloth,
 }
 
-@entity
+@Entity()
 class Container extends Equatable {
-  @primaryKey
-  final int id;
-  final int size;
-  final Material material;
-  final int startDate;
-  final int endDate;
 
-  const Container(
-    this.id,
-    this.size,
-    this.material,
-    this.startDate,
-    this.endDate,
-  );
+  @Id()
+  int id = 0;
+  int size = 0;
+  Material material = Material.plastic;
+  int startDate = 0;
+  int endDate = 0;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         size,
         material,

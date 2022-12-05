@@ -1,27 +1,20 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import 'package:objectbox/objectbox.dart';
 
 enum Denomination {
   USD,
 }
 
-@entity
+@Entity()
 class Cost extends Equatable {
-  @primaryKey
-  final int id;
-  final int amount;
-  final String vendor;
-  final Denomination denomination;
-
-  const Cost(
-    this.id,
-    this.amount,
-    this.vendor,
-    this.denomination,
-  );
+  @Id()
+  int id = 0;
+  int amount = 0;
+  String vendor = "";
+  Denomination denomination = Denomination.USD;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         amount,
         vendor,

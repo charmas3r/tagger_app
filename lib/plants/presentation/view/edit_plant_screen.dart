@@ -1,8 +1,8 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
+import '../../domain/entities/identification.dart';
 import '../bloc/plant_bloc.dart';
 
 class EditPlantScreen extends StatefulWidget {
@@ -92,8 +92,8 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     return BlocConsumer<PlantBloc, PlantState>(listenWhen: (context, state) {
       return state.status == PlantStatus.success;
     }, listener: (context, state) {
-      if (state.plants.isNotEmpty) {
-        textEditingController.text = state.plants.first.name;
+      if (state.plants.first.identification.target?.nickname != null) {
+        textEditingController.text = state.plants.first.identification.target?.nickname as String;
       }
     }, builder: (context, state) {
       switch (state.status) {
@@ -163,10 +163,8 @@ class _EditPlantScreen extends State<EditPlantScreen> {
                 ElevatedButton(
                     child: const Text('Save'),
                     onPressed: () {
-                      Plant copy = plant.copyWith(
-                        name: textEditingController.text,
-                      );
-                      context.read<PlantBloc>().add(UpdatePlantRequested(copy));
+                      plant.identification.target = Identification(nickNameEditController.text);
+                      context.read<PlantBloc>().add(UpdatePlantRequested(plant));
                       Navigator.pop(context);
                     }),
               ],

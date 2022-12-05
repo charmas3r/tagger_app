@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tagger_app/plants/presentation/bloc/plant_bloc.dart';
 import 'package:tagger_app/plants/presentation/view/edit_plant_screen.dart';
 
 import '../../../main/presentation/navigation/model/routes.dart';
@@ -19,7 +17,7 @@ class PlantListItem extends StatelessWidget {
     return Material(
       child: ListTile(
         leading: Text('${plant.id}', style: textTheme.caption),
-        title: Text(plant.name),
+        title: Text('${plant.identification.target?.nickname}'),
         onTap: () {
           log("trying to send ${plant.id}");
           Navigator.pushNamed(context, Routes.editPlantRoute,

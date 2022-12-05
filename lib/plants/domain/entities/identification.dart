@@ -1,25 +1,19 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import 'package:objectbox/objectbox.dart';
 
-@entity
+@Entity()
 class Identification extends Equatable {
-  @primaryKey
-  final int id;
-  final String nickname;
-  final String cultivar;
-  final String species;
-  final String genus;
+  @Id()
+  int id = 0;
+  String nickname = "";
+  String cultivar = "";
+  String species = "";
+  String genus = "";
 
-  const Identification(
-    this.id,
-    this.nickname,
-    this.cultivar,
-    this.species,
-    this.genus,
-  );
+  Identification(this.nickname);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         nickname,
         cultivar,

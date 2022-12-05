@@ -1,21 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import 'package:objectbox/objectbox.dart';
 
-@entity
+@Entity()
 class Origin extends Equatable {
-  @primaryKey
-  final int id;
-  final bool isSeedling;
-  final String vendor;
-
-  const Origin(
-    this.id,
-    this.isSeedling,
-    this.vendor,
-  );
+  @Id()
+  int id = 0;
+  bool isSeedling = false;
+  String vendor = "";
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         isSeedling,
         vendor,

@@ -1,0 +1,328 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1982198291497604056",
+      "lastPropertyId": "1:6013705289690223922",
+      "name": "Climate",
+      "properties": [
+        {
+          "id": "1:6013705289690223922",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:6958333080167552796",
+      "lastPropertyId": "4:6676661836054824420",
+      "name": "Container",
+      "properties": [
+        {
+          "id": "1:6703109471672309936",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7494361170176743591",
+          "name": "size",
+          "type": 6
+        },
+        {
+          "id": "3:2766924414594758715",
+          "name": "startDate",
+          "type": 6
+        },
+        {
+          "id": "4:6676661836054824420",
+          "name": "endDate",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:3006546223095571586",
+      "lastPropertyId": "3:3742650937248369788",
+      "name": "Cost",
+      "properties": [
+        {
+          "id": "1:6893453734774461843",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9054366254526699328",
+          "name": "amount",
+          "type": 6
+        },
+        {
+          "id": "3:3742650937248369788",
+          "name": "vendor",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:1950827266022144185",
+      "lastPropertyId": "2:3435195776237879326",
+      "name": "DaySchedule",
+      "properties": [
+        {
+          "id": "1:8205867763870092315",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3435195776237879326",
+          "name": "time",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:1108225818147431844",
+      "lastPropertyId": "4:915075001029044398",
+      "name": "Fertilizer",
+      "properties": [
+        {
+          "id": "1:7412670784004783013",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7846701696549393622",
+          "name": "startDate",
+          "type": 6
+        },
+        {
+          "id": "3:2321434188428622906",
+          "name": "endDate",
+          "type": 6
+        },
+        {
+          "id": "4:915075001029044398",
+          "name": "product",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:5181425805377477919",
+          "name": "days",
+          "targetId": "4:1950827266022144185"
+        }
+      ]
+    },
+    {
+      "id": "6:8124414911422453163",
+      "lastPropertyId": "5:6132855188538677107",
+      "name": "Identification",
+      "properties": [
+        {
+          "id": "1:5328645514653097409",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8733788069546424004",
+          "name": "nickname",
+          "type": 9
+        },
+        {
+          "id": "3:8173809458135941719",
+          "name": "cultivar",
+          "type": 9
+        },
+        {
+          "id": "4:8392765486675863668",
+          "name": "species",
+          "type": 9
+        },
+        {
+          "id": "5:6132855188538677107",
+          "name": "genus",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:2258550035919050889",
+      "lastPropertyId": "3:2354366846030047337",
+      "name": "Origin",
+      "properties": [
+        {
+          "id": "1:2285782092284592051",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6574881982802392783",
+          "name": "isSeedling",
+          "type": 1
+        },
+        {
+          "id": "3:2354366846030047337",
+          "name": "vendor",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:3057539940995413029",
+      "lastPropertyId": "11:7036294914818308948",
+      "name": "Plant",
+      "properties": [
+        {
+          "id": "1:3029737143958356742",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "3:1358162104516736910",
+          "name": "createDate",
+          "type": 6
+        },
+        {
+          "id": "4:8255449723239074897",
+          "name": "acquireDate",
+          "type": 6
+        },
+        {
+          "id": "5:7334995466530287612",
+          "name": "identificationId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:1410348180589630682",
+          "relationTarget": "Identification"
+        },
+        {
+          "id": "6:7540749566006632851",
+          "name": "originId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:782149100564978491",
+          "relationTarget": "Origin"
+        },
+        {
+          "id": "7:8886463374392617916",
+          "name": "containerId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:8419935409479222909",
+          "relationTarget": "Container"
+        },
+        {
+          "id": "8:8493812354528705797",
+          "name": "soilId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:4207362769105921223",
+          "relationTarget": "Soil"
+        },
+        {
+          "id": "9:2226907307447447035",
+          "name": "climateId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:3417122555837788078",
+          "relationTarget": "Climate"
+        },
+        {
+          "id": "10:3211847593795839267",
+          "name": "waterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:8553170916285474630",
+          "relationTarget": "Water"
+        },
+        {
+          "id": "11:7036294914818308948",
+          "name": "fertilizerId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:911694939341035075",
+          "relationTarget": "Fertilizer"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:8214042681774138980",
+      "lastPropertyId": "2:3962925317820886156",
+      "name": "Soil",
+      "properties": [
+        {
+          "id": "1:3878530126735887045",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3962925317820886156",
+          "name": "ph",
+          "type": 8
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:7490017471890477341",
+      "lastPropertyId": "3:4229984920609561681",
+      "name": "Water",
+      "properties": [
+        {
+          "id": "1:9011834660693579806",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7994239652078081270",
+          "name": "startDate",
+          "type": 6
+        },
+        {
+          "id": "3:4229984920609561681",
+          "name": "endDate",
+          "type": 6
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:4657545731895308826",
+          "name": "days",
+          "targetId": "4:1950827266022144185"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "10:7490017471890477341",
+  "lastIndexId": "7:911694939341035075",
+  "lastRelationId": "2:4657545731895308826",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    1869404276942913952
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

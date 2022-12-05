@@ -1,0 +1,4 @@
+enum MeasurementUnit {
+  tablespoon,
+  cup,
+}

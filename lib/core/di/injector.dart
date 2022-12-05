@@ -9,19 +9,18 @@ import 'package:tagger_app/plants/presentation/bloc/plant_bloc.dart';
 import '../../plants/domain/usecase/create_plant_use_case.dart';
 import '../../plants/domain/usecase/get_saved_plant_by_id_use_case.dart';
 import '../../plants/domain/usecase/get_saved_plants_use_case.dart';
-import '../../utils/constants.dart';
-import '../data/db/app_database.dart';
+import '../data/db/object_box.dart';
 
 final injector = GetIt.instance;
 
 Future<void> initDependencies() async {
   // db
-  final database = await $FloorAppDatabase.databaseBuilder(kDatabaseName).build();
-  injector.registerSingleton<AppDatabase>(database);
+  final database = await ObjectBox.create();
+  injector.registerSingleton<ObjectBox>(database);
 
   // plants
   injector.registerSingleton<LocalPlantDataProvider>(
-      LocalPlantDataProvider(plantDao: database.plantDao)
+      LocalPlantDataProvider(database: database)
   );
   injector.registerSingleton<RemotePlantDataProvider>(RemotePlantDataProvider());
   injector.registerSingleton<PlantRepository>(
@@ -48,7 +47,6 @@ Future<void> initDependencies() async {
       RemovePlantUseCase(plantRepository: injector())
   );
 
-
   // blocs
   injector.registerFactory<PlantBloc>(
         () => PlantBloc(
@@ -58,5 +56,10 @@ Future<void> initDependencies() async {
             updatePlantUseCase: injector(),
           removePlantUseCase: injector(),
         ),
+  );
+
+  // utils
+  injector.registerSingleton<DateTime>(
+    DateTime.now()
   );
 }

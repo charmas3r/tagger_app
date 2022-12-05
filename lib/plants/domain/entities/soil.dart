@@ -1,30 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:floor/floor.dart';
+import 'package:objectbox/objectbox.dart';
 
-enum Amendments {
-  plastic,
-  terracotta,
-  metal,
-  cloth,
+// TODO add more as needed
+enum Medium {
+  coir,
+  perlite,
+  pumice,
+  peat,
 }
 
-@entity
+@Entity()
 class Soil extends Equatable {
-  @primaryKey
-  final int id;
-  final double ph;
-  final Amendments amendments;
-  final String base;
-
-  const Soil(
-    this.id,
-    this.ph,
-    this.amendments,
-    this.base,
-  );
+  @Id()
+  int id = 0;
+  double ph = 7.0;
+  List<Medium> amendments = [Medium.coir];
+  Medium base = Medium.peat;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         ph,
         amendments,
@@ -36,7 +30,7 @@ class Soil extends Equatable {
     return '''Soil { 
                 id: $id,
                 ph: $ph,
-                amendments: $amendments, 
+                amendments: ${amendments.toString()}, 
                 base: $base, 
               }''';
   }

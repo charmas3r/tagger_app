@@ -50,6 +50,6 @@ class PlantRepository {
   }
 
   Future<Plant?> getPlantByUniqueId(int plantId) async {
-    return await localDataProvider.getPlantByUniqueId(plantId);
+    return localDataProvider.getPlantByUniqueId(plantId);
   }
 }

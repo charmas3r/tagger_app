@@ -1,19 +1,22 @@
 import 'dart:developer';
 
-import 'package:tagger_app/plants/data/local/plant_dao.dart';
-
+import '../../../core/data/db/object_box.dart';
 import '../../../core/data/model/result.dart';
 import '../../domain/entities/plant.dart';
 import '../base/base_plant_data_provider.dart';
 
 class LocalPlantDataProvider extends BasePlantDataProvider {
-  const LocalPlantDataProvider({required this.plantDao});
-  final PlantDao plantDao;
+  const LocalPlantDataProvider({
+    required this.database
+  });
+
+  final ObjectBox database;
 
   @override
   Future<Result> createPlant(Plant plant) async {
     try {
-      await plantDao.insertPlant(plant);
+      final plantBox = database.store.box<Plant>();
+      plantBox.put(plant);
       return Result.success;
     } catch (e) {
       return Result.failed;
@@ -23,7 +26,8 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   @override
   Future<Plant?> updatePlant(Plant plant) async {
     try {
-      await plantDao.updatePlant(plant);
+      final plantBox = database.store.box<Plant>();
+      plantBox.put(plant);
       return plant;
     } catch (e) {
       log("Error in updating the plant, returning null instead");
@@ -34,7 +38,8 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   @override
   Future<List<Plant>> fetchPlants() async {
     try {
-      return await plantDao.findAllPlants();
+      final plantBox = database.store.box<Plant>();
+      return plantBox.getAll();
     } catch (e) {
       return List.empty();
     }
@@ -43,8 +48,9 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
   @override
   Future<Result> deletePlant(int plantId) async {
     try {
-      var deletedItem = await plantDao.deletePlant(plantId);
-      return deletedItem != null ? Result.success : Result.failed;
+      final plantBox = database.store.box<Plant>();
+      final isRemoved = plantBox.remove(plantId);
+      return isRemoved ? Result.success : Result.failed;
     } catch (e) {
       return Result.failed;
     }
@@ -54,7 +60,8 @@ class LocalPlantDataProvider extends BasePlantDataProvider {
     return Result.success;
   }
 
-  Future<Plant?> getPlantByUniqueId(int plantId) {
-    return plantDao.findPlantByUniqueId(plantId);
+  Plant? getPlantByUniqueId(int plantId) {
+    final plantBox = database.store.box<Plant>();
+    return plantBox.get(plantId);
   }
 }

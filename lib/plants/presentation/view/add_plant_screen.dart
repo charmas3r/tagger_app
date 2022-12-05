@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tagger_app/plants/domain/entities/builder/decideous_flowering_tree_builder.dart';
+import 'package:tagger_app/plants/domain/entities/identification.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
 import 'package:tagger_app/utils/uuid.dart';
 
@@ -79,10 +81,9 @@ class _AddPlantScreen extends State<AddPlantScreen> {
       const SizedBox(height: 48),
       ElevatedButton(
         onPressed: () {
-          Plant plant = Plant(
-            generateUniquePrimaryId(),
-            textEditingController.text,
-          );
+          final plant = DecideousFloweringTreeBuilder()
+              .setIdentification(Identification(nickNameEditController.text))
+              .create();
           context.read<PlantBloc>().add(SavePlantRequested(plant));
           context.read<PlantBloc>().add(const FetchPlantsRequested());
           Navigator.pop(context);
