@@ -2,10 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tagger_app/plants/domain/entities/plant.dart';
 
 import '../bloc/plant_bloc.dart';
-import '../widgets/bottom_loader.dart';
 import '../widgets/plant_list_item.dart';
 
 class PlantsPage extends StatefulWidget {
@@ -48,6 +46,7 @@ class _PlantsPageState extends State<PlantsPage> {
                 controller: _scrollController,
               ),
             );
+          case PlantStatus.loading:
           case PlantStatus.initial:
             return const Center(child: CircularProgressIndicator());
         }

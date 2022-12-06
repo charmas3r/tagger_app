@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/core/data/model/result.dart';
@@ -83,10 +85,11 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
   Future<void> _onPlantUpdated(UpdatePlantRequested event,
       Emitter<PlantState> emit) async {
     try {
+      emit(state.copyWith(status: PlantStatus.loading));
       final updatedPlant = await updatePlantUseCase.call(params: event.plant);
       if (updatedPlant != null) {
         List<Plant> plants = <Plant>[updatedPlant];
-        return emit(PlantState(
+        return emit(state.copyWith(
           status: PlantStatus.success,
           plants: plants,
         ));

@@ -1,6 +1,6 @@
 part of 'plant_bloc.dart';
 
-enum PlantStatus { initial, success, failure }
+enum PlantStatus { initial, loading, success, failure }
 
 class PlantState extends Equatable {
   const PlantState({
@@ -19,4 +19,14 @@ class PlantState extends Equatable {
 
   @override
   List<Object> get props => [status, plants];
+
+  PlantState copyWith({
+    List<Plant>? plants,
+    PlantStatus? status,
+  }) {
+    return PlantState(
+      plants: plants ?? this.plants,
+      status: status ?? this.status,
+    );
+  }
 }

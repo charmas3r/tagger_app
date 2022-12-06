@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,36 +65,36 @@ class _EditPlantScreen extends State<EditPlantScreen> {
   void _showAlertDialog(int plantId, BuildContext pageContext) {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) =>
-          AlertDialog(
-            title: const Text('AlertDialog Title'),
-            content: const Text('AlertDialog description'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'Cancel'),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<PlantBloc>().add(RemovePlantRequested(plantId));
-                  context.read<PlantBloc>().add(const FetchPlantsRequested());
-                  Navigator.pop(context, 'OK');
-                  Navigator.pop(pageContext);
-                },
-                child: const Text('Ok'),
-              ),
-            ],
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('AlertDialog Title'),
+        content: const Text('AlertDialog description'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () {
+              context.read<PlantBloc>().add(RemovePlantRequested(plantId));
+              context.read<PlantBloc>().add(const FetchPlantsRequested());
+              Navigator.pop(context, 'OK');
+              Navigator.pop(pageContext);
+            },
+            child: const Text('Ok'),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildBody(TextEditingController textEditingController,
-      BuildContext context,) {
-    return BlocConsumer<PlantBloc, PlantState>(listenWhen: (context, state) {
-      return state.status == PlantStatus.success;
-    }, listener: (context, state) {
-      if (state.plants.first.identification.target?.nickname != null) {
-        textEditingController.text = state.plants.first.identification.target?.nickname as String;
+  Widget _buildBody(
+    TextEditingController textEditingController,
+    BuildContext context,
+  ) {
+    return BlocConsumer<PlantBloc, PlantState>(listener: (context, state) {
+      if (state.plants.isNotEmpty) {
+        textEditingController.text =
+            state.plants.first.identification.target?.nickname as String;
       }
     }, builder: (context, state) {
       switch (state.status) {
@@ -105,15 +106,18 @@ class _EditPlantScreen extends State<EditPlantScreen> {
             children: _buildChildren(
                 textEditingController, context, state.plants.first),
           );
+        case PlantStatus.loading:
         case PlantStatus.initial:
           return const Center(child: CircularProgressIndicator());
       }
     });
   }
 
-  List<Widget> _buildChildren(TextEditingController textEditingController,
-      BuildContext context,
-      Plant plant,) {
+  List<Widget> _buildChildren(
+    TextEditingController textEditingController,
+    BuildContext context,
+    Plant plant,
+  ) {
     return [
       const ListTile(
         title: Text("General"),
@@ -129,11 +133,13 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     ];
   }
 
-  void _showEditPlantBottomSheet(TextEditingController textEditingController,
-      BuildContext context,
-      Plant plant,) {
+  void _showEditPlantBottomSheet(
+    TextEditingController textEditingController,
+    BuildContext pageContext,
+    Plant plant,
+  ) {
     showModalBottomSheet<void>(
-      context: context,
+      context: pageContext,
       isScrollControlled: true,
       builder: (BuildContext context) {
         return Padding(
@@ -141,10 +147,7 @@ class _EditPlantScreen extends State<EditPlantScreen> {
               top: 24,
               right: 24,
               left: 24,
-              bottom: MediaQuery
-                  .of(context)
-                  .viewInsets
-                  .bottom),
+              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SizedBox(
             height: 240,
             child: Column(
@@ -163,9 +166,13 @@ class _EditPlantScreen extends State<EditPlantScreen> {
                 ElevatedButton(
                     child: const Text('Save'),
                     onPressed: () {
-                      plant.identification.target = Identification(nickNameEditController.text);
-                      context.read<PlantBloc>().add(UpdatePlantRequested(plant));
-                      Navigator.pop(context);
+                      log("pressed save btn..");
+                      plant.identification.target =
+                          Identification(textEditingController.text);
+                      context
+                          .read<PlantBloc>()
+                          .add(UpdatePlantRequested(plant));
+                      Navigator.of(context).pop();
                     }),
               ],
             ),

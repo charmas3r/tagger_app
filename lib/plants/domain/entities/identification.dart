@@ -13,7 +13,7 @@ class Identification extends Equatable {
   Identification(this.nickname);
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         id,
         nickname,
         cultivar,
