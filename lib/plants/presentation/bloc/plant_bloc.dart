@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,6 @@ import '../../domain/usecase/remove_plant_use_case.dart';
 import '../../domain/usecase/update_plant_use_case.dart';
 
 part 'plant_event.dart';
-
 part 'plant_state.dart';
 
 class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
@@ -41,12 +39,12 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
       Emitter<PlantState> emit) async {
     try {
       final plants = await getSavedPlantsUseCase.call();
-      return emit(PlantState(
+      return emit(state.copyWith(
         status: PlantStatus.success,
         plants: plants,
       ));
     } catch (_) {
-      return emit(const PlantState(status: PlantStatus.failure));
+      return emit(state.copyWith(status: PlantStatus.failure));
     }
   }
 
@@ -56,15 +54,15 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
       final plant = await getSavedPlantByIdUseCase.call(params: event.id);
       if (plant != null) {
         List<Plant> plants = <Plant>[plant];
-        return emit(PlantState(
+        return emit(state.copyWith(
           status: PlantStatus.success,
           plants: plants,
         ));
       } else {
-        return emit(const PlantState(status: PlantStatus.failure));
+        return emit(state.copyWith(status: PlantStatus.failure));
       }
     } catch (_) {
-      return emit(const PlantState(status: PlantStatus.failure));
+      return emit(state.copyWith(status: PlantStatus.failure));
     }
   }
 
@@ -73,12 +71,12 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
     try {
       final result = await createPlantUseCase.call(params: event.plant);
       if (result == Result.success) {
-        return emit(const PlantState(status: PlantStatus.success));
+        return emit(state.copyWith(status: PlantStatus.success));
       } else {
-        return emit(const PlantState(status: PlantStatus.failure));
+        return emit(state.copyWith(status: PlantStatus.failure));
       }
     } catch (_) {
-      return emit(const PlantState(status: PlantStatus.failure));
+      return emit(state.copyWith(status: PlantStatus.failure));
     }
   }
 
@@ -94,10 +92,10 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
           plants: plants,
         ));
       } else {
-        return emit(const PlantState(status: PlantStatus.failure));
+        return emit(state.copyWith(status: PlantStatus.failure));
       }
     } catch (_) {
-      return emit(const PlantState(status: PlantStatus.failure));
+      return emit(state.copyWith(status: PlantStatus.failure));
     }
   }
 
@@ -106,12 +104,12 @@ class PlantBloc extends BlocWithState<PlantEvent, PlantState> {
     try {
       final result = await removePlantUseCase.call(params: event.id);
       if (result == Result.success) {
-        return emit(const PlantState(status: PlantStatus.success));
+        return emit(state.copyWith(status: PlantStatus.success));
       } else {
-        return emit(const PlantState(status: PlantStatus.failure));
+        return emit(state.copyWith(status: PlantStatus.failure));
       }
     } catch (_) {
-      return emit(const PlantState(status: PlantStatus.failure));
+      return emit(state.copyWith(status: PlantStatus.failure));
     }
   }
 }
