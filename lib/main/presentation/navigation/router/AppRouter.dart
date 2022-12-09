@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tagger_app/plants/presentation/view/edit_plant_screen.dart';
+import 'package:tagger_app/plants/presentation/view/identification_settings_screen.dart';
 import '../../../../plants/presentation/view/add_plant_screen.dart';
 import '../../screens/home_screen.dart';
 import '../model/routes.dart';
@@ -25,6 +26,14 @@ class AppRouter {
             builder: (_) => EditPlantScreen(
                 title: "Edit Plant Screen",
                 plantId: args.plantId,
+            )
+        );
+      case Routes.idSettingsPlantRoute:
+        final args = settings.arguments as IdentificationSettingsScreenArguments;
+        return MaterialPageRoute(
+            builder: (_) => IdentificationSettingsScreen(
+              title: "Identification Settings Screen",
+              plantId: args.plantId,
             )
         );
       default:

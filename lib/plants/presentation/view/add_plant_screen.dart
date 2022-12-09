@@ -82,7 +82,11 @@ class _AddPlantScreen extends State<AddPlantScreen> {
       ElevatedButton(
         onPressed: () {
           final plant = DecideousFloweringTreeBuilder()
-              .setIdentification(Identification(nickNameEditController.text))
+              .setIdentification(Identification(
+                nickname: nickNameEditController.text,
+                cultivar: "Celadine",
+                species: "Plumeria rubra",
+              ))
               .create();
           context.read<PlantBloc>().add(SavePlantRequested(plant));
           context.read<PlantBloc>().add(const FetchPlantsRequested());

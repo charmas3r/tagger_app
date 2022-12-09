@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
+import 'package:tagger_app/plants/presentation/extensions/stateful_widget.dart';
+import 'package:tagger_app/plants/presentation/view/identification_settings_screen.dart';
+import '../../../main/presentation/navigation/model/routes.dart';
 import '../../domain/entities/identification.dart';
 import '../bloc/plant_bloc.dart';
 
@@ -127,59 +130,33 @@ class _EditPlantScreen extends State<EditPlantScreen> {
         title: Text(textEditingController.text),
         trailing: const Icon(Icons.edit),
         onTap: () {
-          _showEditPlantBottomSheet(textEditingController, context, plant);
+          String bottomSheetTitle = "Choose a nickname";
+          String bottomSheetEditLabel = "Plant nickname";
+          showEditableBottomSheet(
+            context,
+            plant,
+            TextEditingController(
+                text: '${plant.identification.target?.nickname}'),
+            bottomSheetTitle,
+            bottomSheetEditLabel,
+            (String val) {
+              plant.identification.target =
+                  plant.identification.target?.copyWith(nickname: val);
+              context.read<PlantBloc>().add(UpdatePlantRequested(plant));
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      ),
+      ListTile(
+        title: const Text("Identification"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.idSettingsPlantRoute,
+              arguments: IdentificationSettingsScreenArguments(plant.id));
         },
       ),
     ];
-  }
-
-  void _showEditPlantBottomSheet(
-    TextEditingController textEditingController,
-    BuildContext pageContext,
-    Plant plant,
-  ) {
-    showModalBottomSheet<void>(
-      context: pageContext,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-              top: 24,
-              right: 24,
-              left: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SizedBox(
-            height: 240,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const SizedBox(height: 16),
-                const Text('Choose a Nickname'),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: textEditingController,
-                  decoration: const InputDecoration(
-                    labelText: 'Plant Nickname',
-                  ),
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                    child: const Text('Save'),
-                    onPressed: () {
-                      log("pressed save btn..");
-                      plant.identification.target =
-                          Identification(textEditingController.text);
-                      context
-                          .read<PlantBloc>()
-                          .add(UpdatePlantRequested(plant));
-                      Navigator.of(context).pop();
-                    }),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 }
 

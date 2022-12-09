@@ -35,27 +35,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
+    return NavigationBar(
+      onDestinationSelected: (int index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      selectedIndex: _selectedIndex,
+      destinations: const <Widget>[
+        NavigationDestination(
           icon: Icon(Icons.forest),
           label: 'Plants',
         ),
-        BottomNavigationBarItem(
+        NavigationDestination(
           icon: Icon(Icons.qr_code),
-          label: 'QR Scan',
+          label: 'Scan',
         ),
       ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Theme.of(context).colorScheme.primary,
-      onTap: _onItemTapped,
     );
   }
 
@@ -87,27 +84,29 @@ class _HomeScreenState extends State<HomeScreen> {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.primary,
             ),
-            child: Text('Drawer Header'),
+            child: Text(
+                'Drawer Header',
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),),
           ),
           ListTile(
-            title: const Text('Item 1'),
+            title: const Text('Identification Center'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            title: const Text('Settings'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Ideas Center'),
+            onTap: () {
               Navigator.pop(context);
             },
           ),

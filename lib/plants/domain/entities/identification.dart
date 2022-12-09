@@ -8,9 +8,14 @@ class Identification extends Equatable {
   String nickname = "";
   String cultivar = "";
   String species = "";
-  String genus = "";
+  String genus = "Plumeria L.";
+  String family = "Apocynaceae";
 
-  Identification(this.nickname);
+  Identification({
+    required this.nickname,
+    required this.cultivar,
+    required this.species,
+  });
 
   @override
   List<Object> get props => [
@@ -19,10 +24,24 @@ class Identification extends Equatable {
         cultivar,
         species,
         genus,
+        family,
       ];
 
   @override
   String toString() {
     return '''Identification { id: $id, nickname: $nickname, cultivar: $cultivar, species: $species, genus: $genus}''';
+  }
+
+  Identification copyWith({
+    int? id,
+    String? nickname,
+    String? cultivar,
+    String? species,
+  }) {
+    return Identification(
+      nickname: nickname ?? this.nickname,
+      cultivar: cultivar ?? this.cultivar,
+      species: species ?? this.species,
+    );
   }
 }

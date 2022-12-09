@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
@@ -28,7 +29,7 @@ class PlantTheme {
         buttonColor: ThemeColors.veniceBlue,
       ),
       appBarTheme: const AppBarTheme(
-        elevation: 8,
+        elevation: 8
       ),
     );
   }
