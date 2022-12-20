@@ -1,11 +1,13 @@
+import 'dart:ffi';
+
 import 'package:tagger_app/plants/domain/entities/builder/plant_builder_base.dart';
 import 'package:tagger_app/plants/domain/entities/container.dart';
 import 'package:tagger_app/plants/domain/entities/fertilizer.dart';
 import 'package:tagger_app/plants/domain/entities/identification.dart';
 import 'package:tagger_app/plants/domain/entities/origin.dart';
-import 'package:tagger_app/plants/domain/entities/soil.dart';
 import 'package:tagger_app/plants/domain/entities/water.dart';
 
+import '../../../../soil/domain/entities/soil.dart';
 import '../plant.dart';
 
 class DecideousFloweringTreeBuilder extends PlantBuilderBase {
@@ -30,12 +32,6 @@ class DecideousFloweringTreeBuilder extends PlantBuilderBase {
   @override
   PlantBuilderBase setOrigin(Origin origin) {
     plant.origin.target = origin;
-    return this;
-  }
-
-  @override
-  PlantBuilderBase setSoil(Soil soil) {
-    plant.soil.target = soil;
     return this;
   }
 

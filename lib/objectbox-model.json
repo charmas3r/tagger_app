@@ -165,7 +165,7 @@
     },
     {
       "id": "7:2258550035919050889",
-      "lastPropertyId": "3:2354366846030047337",
+      "lastPropertyId": "4:3815804741006927193",
       "name": "Origin",
       "properties": [
         {
@@ -183,6 +183,11 @@
           "id": "3:2354366846030047337",
           "name": "vendor",
           "type": 9
+        },
+        {
+          "id": "4:3815804741006927193",
+          "name": "acquireDate",
+          "type": 10
         }
       ],
       "relations": []
@@ -201,11 +206,6 @@
         {
           "id": "3:1358162104516736910",
           "name": "createDate",
-          "type": 6
-        },
-        {
-          "id": "4:8255449723239074897",
-          "name": "acquireDate",
           "type": 6
         },
         {
@@ -235,10 +235,7 @@
         {
           "id": "8:8493812354528705797",
           "name": "soilId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "4:4207362769105921223",
-          "relationTarget": "Soil"
+          "type": 6
         },
         {
           "id": "9:2226907307447447035",
@@ -269,7 +266,7 @@
     },
     {
       "id": "9:8214042681774138980",
-      "lastPropertyId": "2:3962925317820886156",
+      "lastPropertyId": "6:5735645894594946265",
       "name": "Soil",
       "properties": [
         {
@@ -282,9 +279,25 @@
           "id": "2:3962925317820886156",
           "name": "ph",
           "type": 8
+        },
+        {
+          "id": "5:7125309055425457381",
+          "name": "mixDate",
+          "type": 10
+        },
+        {
+          "id": "6:5735645894594946265",
+          "name": "name",
+          "type": 9
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "3:3232237302920287481",
+          "name": "soilMediums",
+          "targetId": "11:3583429288166064697"
+        }
+      ]
     },
     {
       "id": "10:7490017471890477341",
@@ -315,18 +328,47 @@
           "targetId": "4:1950827266022144185"
         }
       ]
+    },
+    {
+      "id": "11:3583429288166064697",
+      "lastPropertyId": "3:2797327148320488909",
+      "name": "SoilMedium",
+      "properties": [
+        {
+          "id": "1:2593468530685186764",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7251998136736667160",
+          "name": "medium",
+          "type": 9
+        },
+        {
+          "id": "3:2797327148320488909",
+          "name": "part",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "10:7490017471890477341",
+  "lastEntityId": "11:3583429288166064697",
   "lastIndexId": "7:911694939341035075",
-  "lastRelationId": "2:4657545731895308826",
+  "lastRelationId": "3:3232237302920287481",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    4207362769105921223
+  ],
   "retiredPropertyUids": [
-    1869404276942913952
+    1869404276942913952,
+    8255449723239074897,
+    3459616518871890027,
+    6326617301396093534
   ],
   "retiredRelationUids": [],
   "version": 1

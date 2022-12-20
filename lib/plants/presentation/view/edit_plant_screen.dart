@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
 import 'package:tagger_app/plants/presentation/extensions/stateful_widget.dart';
 import 'package:tagger_app/plants/presentation/view/identification_settings_screen.dart';
+import 'package:tagger_app/plants/presentation/view/origin_settings_screen.dart';
+import 'package:tagger_app/plants/presentation/view/soil_settings_screen.dart';
 import '../../../main/presentation/navigation/model/routes.dart';
 import '../../domain/entities/identification.dart';
 import '../bloc/plant_bloc.dart';
@@ -134,11 +136,11 @@ class _EditPlantScreen extends State<EditPlantScreen> {
           String bottomSheetEditLabel = "Plant nickname";
           showEditableBottomSheet(
             context,
-            plant,
             TextEditingController(
                 text: '${plant.identification.target?.nickname}'),
             bottomSheetTitle,
             bottomSheetEditLabel,
+            EditableBottomSheetType.string,
             (String val) {
               plant.identification.target =
                   plant.identification.target?.copyWith(nickname: val);
@@ -154,6 +156,58 @@ class _EditPlantScreen extends State<EditPlantScreen> {
         onTap: () {
           Navigator.pushNamed(context, Routes.idSettingsPlantRoute,
               arguments: IdentificationSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("History"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.historySettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Location"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      const ListTile(
+        title: Text("Care"),
+        dense: true,
+      ),
+      ListTile(
+        title: const Text("Watering Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Fertilizer Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Soil"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.soilSettingsPlantRoute,
+              arguments: SoilSettingsScreenArguments(plant.soilId));
+        },
+      ),
+      ListTile(
+        title: const Text("Container"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
         },
       ),
     ];

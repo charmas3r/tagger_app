@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.pushNamed(context, Routes.addPlantRoute);
         },
-        label: const Text('Add'),
+        label: const Text('Add Plant'),
         icon: const Icon(Icons.add),
       );
     }
@@ -93,19 +93,32 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),),
           ),
           ListTile(
+            title: const Text('Plant Center'),
+            selected: true,
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Soil Center'),
+            onTap: () {
+              Navigator.pushNamed(context, Routes.soilCenterRoute);
+            },
+          ),
+          ListTile(
             title: const Text('Identification Center'),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Settings'),
+            title: const Text('Ideas Center'),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: const Text('Ideas Center'),
+            title: const Text('Settings'),
             onTap: () {
               Navigator.pop(context);
             },

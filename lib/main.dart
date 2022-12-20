@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tagger_app/plants/presentation/bloc/plant_bloc.dart';
 import 'package:tagger_app/resources/colors.dart';
 import 'package:tagger_app/resources/theme.dart';
+import 'package:tagger_app/soil/presentation/bloc/soil_bloc.dart';
 
 import 'core/bloc/simple_bloc_observer.dart';
 import 'core/di/injector.dart';
@@ -28,13 +29,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: ThemeColors.veniceBlue.shade50,
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: ThemeColors.veniceBlue.shade50,
         systemNavigationBarIconBrightness: Brightness.dark,
-    ),);
+      ),
+    );
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return BlocProvider<PlantBloc>(
-      create: (_) => injector()..add(const FetchPlantsRequested()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PlantBloc>(
+          create: (_) =>
+          injector()
+            ..add(const FetchPlantsRequested()),
+        ),
+        BlocProvider<SoilBloc>(
+          create: (_) =>
+          injector()
+            ..add(const FetchSoilBlendsRequested()),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

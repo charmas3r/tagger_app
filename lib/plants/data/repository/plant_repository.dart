@@ -37,7 +37,7 @@ class PlantRepository {
     log("attempting to create plant in db");
     // final Result remoteResult = await remoteDataProvider.createPlant(plant);
     final Result localResult = await localDataProvider.createPlant(plant);
-    log("result of db operation: $localResult");
+    log("result of db operation:\n$localResult");
     return localResult;
   }
 
@@ -45,7 +45,7 @@ class PlantRepository {
     log("attempting to update plant in db");
     // final Result remoteResult = await remoteDataProvider.createPlant(plant);
     final Plant? localResult = await localDataProvider.updatePlant(plant);
-    log("result of db operation: $localResult");
+    log("result of db operation:\n$localResult");
     return localResult;
   }
 

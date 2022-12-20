@@ -1,29 +1,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tagger_app/plants/domain/entities/builder/decideous_flowering_tree_builder.dart';
-import 'package:tagger_app/plants/domain/entities/identification.dart';
-import 'package:tagger_app/plants/domain/entities/origin.dart';
+import 'package:tagger_app/soil/domain/entities/builder/soil_builder.dart';
+import 'package:tagger_app/soil/domain/entities/soil_medium.dart';
+import 'package:tagger_app/soil/presentation/bloc/soil_bloc.dart';
 
-import '../../../soil/domain/entities/builder/soil_builder.dart';
-import '../../../soil/domain/entities/soil_medium.dart';
-import '../bloc/plant_bloc.dart';
-
-class AddPlantScreen extends StatefulWidget {
-  const AddPlantScreen({Key? key, required this.title}) : super(key: key);
+class SoilBuilderScreen extends StatefulWidget {
+  const SoilBuilderScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _AddPlantScreen createState() => _AddPlantScreen();
+  _SoilBuilderScreen createState() => _SoilBuilderScreen();
 }
 
-class _AddPlantScreen extends State<AddPlantScreen> {
-  final nickNameEditController = TextEditingController();
+class _SoilBuilderScreen extends State<SoilBuilderScreen> {
+  final soilNameEditController = TextEditingController();
 
   @override
   void dispose() {
-    nickNameEditController.dispose();
+    soilNameEditController.dispose();
     super.dispose();
   }
 
@@ -33,26 +29,26 @@ class _AddPlantScreen extends State<AddPlantScreen> {
         onWillPop: () async => false,
         child: Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody(nickNameEditController, context),
+          body: _buildBody(soilNameEditController, context),
         ));
   }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: const Text("Add Plant Screen"),
+      title: const Text("Add Soil Screen"),
       leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.read<PlantBloc>().add(const FetchPlantsRequested());
+            context.read<SoilBloc>().add(const FetchSoilBlendsRequested());
             Navigator.of(context).pop();
           }),
     );
   }
 
   Widget _buildBody(
-    TextEditingController textEditingController,
-    BuildContext context,
-  ) {
+      TextEditingController textEditingController,
+      BuildContext context,
+      ) {
     return ListView(
       padding: const EdgeInsets.all(8),
       children: _buildChildren(textEditingController, context),
@@ -60,11 +56,11 @@ class _AddPlantScreen extends State<AddPlantScreen> {
   }
 
   List<Widget> _buildChildren(
-    TextEditingController textEditingController,
-    BuildContext context,
-  ) {
+      TextEditingController textEditingController,
+      BuildContext context,
+      ) {
     String initialTextTitle = textEditingController.text.isEmpty
-        ? "Choose a nickname"
+        ? "Choose a soil name"
         : textEditingController.text;
     return [
       const ListTile(
@@ -81,20 +77,13 @@ class _AddPlantScreen extends State<AddPlantScreen> {
       const SizedBox(height: 48),
       ElevatedButton(
         onPressed: () {
-          final plant = DecideousFloweringTreeBuilder()
-              .setIdentification(Identification(
-                nickname: nickNameEditController.text,
-                cultivar: "NoId",
-                species: "Plumeria rubra",
-              ))
-              .setOrigin(Origin(
-                  isSeedling: false,
-                  vendor: "Unknown",
-                  acquireDate: DateTime.now()
-               ))
-              .create();
-          context.read<PlantBloc>().add(SavePlantRequested(plant));
-          context.read<PlantBloc>().add(const FetchPlantsRequested());
+          final soil = SoilBuilder()
+            .setSoilName(textEditingController.text)
+            .setPh(7.0)
+            .addSoilMedium(SoilMedium(medium: "coir", part: 1))
+            .create();
+          context.read<SoilBloc>().add(SaveSoilBlendRequested(soil));
+          context.read<SoilBloc>().add(const FetchSoilBlendsRequested());
           Navigator.pop(context);
         },
         child: const Text("Save Plant"),
@@ -103,9 +92,9 @@ class _AddPlantScreen extends State<AddPlantScreen> {
   }
 
   void _showEditPlantBottomSheet(
-    TextEditingController textEditingController,
-    BuildContext context,
-  ) {
+      TextEditingController textEditingController,
+      BuildContext context,
+      ) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -122,12 +111,12 @@ class _AddPlantScreen extends State<AddPlantScreen> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(height: 16),
-                const Text('Choose a Nickname'),
+                const Text('Choose a name for this soil blend'),
                 const SizedBox(height: 16),
                 TextField(
                   controller: textEditingController,
                   decoration: const InputDecoration(
-                    labelText: 'Plant Nickname',
+                    labelText: 'Soil blend name',
                     hintText: 'Enter a name',
                   ),
                 ),

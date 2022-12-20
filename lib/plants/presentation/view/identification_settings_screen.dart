@@ -54,7 +54,6 @@ class _IdentificationSettingsScreen
 
   @override
   Widget build(BuildContext context) {
-
     context.read<PlantBloc>().add(FetchPlantRequested(plantId));
     return WillPopScope(
         onWillPop: () async => false,
@@ -79,21 +78,22 @@ class _IdentificationSettingsScreen
   Widget _buildBody(
     BuildContext context,
   ) {
-    return BlocConsumer<PlantBloc, PlantState>(listener: (context, state) {
-    }, builder: (context, state) {
-      switch (state.status) {
-        case PlantStatus.failure:
-          return const Center(child: Text('failed to fetch plant'));
-        case PlantStatus.success:
-          return ListView(
-            padding: const EdgeInsets.all(8),
-            children: _buildChildren(context, state.plants.first),
-          );
-        case PlantStatus.loading:
-        case PlantStatus.initial:
-          return const Center(child: CircularProgressIndicator());
-      }
-    });
+    return BlocConsumer<PlantBloc, PlantState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          switch (state.status) {
+            case PlantStatus.failure:
+              return const Center(child: Text('failed to fetch plant'));
+            case PlantStatus.success:
+              return ListView(
+                padding: const EdgeInsets.all(8),
+                children: _buildChildren(context, state.plants.first),
+              );
+            case PlantStatus.loading:
+            case PlantStatus.initial:
+              return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   List<Widget> _buildChildren(
@@ -102,8 +102,8 @@ class _IdentificationSettingsScreen
   ) {
     return [
       ListTile(
-          title: const Text("Family"),
-          trailing: Text("${plant.identification.target?.family}"),
+        title: const Text("Family"),
+        trailing: Text("${plant.identification.target?.family}"),
       ),
       ListTile(
         title: const Text("Genus"),
@@ -118,16 +118,13 @@ class _IdentificationSettingsScreen
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
           underline: Container(
             height: 2,
-              color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary,
           ),
           onChanged: (String? value) {
-            plant.identification.target =
-                plant.identification.target?.copyWith(
-                    species: value,
-                );
-            context
-                .read<PlantBloc>()
-                .add(UpdatePlantRequested(plant));
+            plant.identification.target = plant.identification.target?.copyWith(
+              species: value,
+            );
+            context.read<PlantBloc>().add(UpdatePlantRequested(plant));
           },
           items: list.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -147,21 +144,18 @@ class _IdentificationSettingsScreen
           String bottomSheetTitle = "Choose a cultivar name";
           String bottomSheetEditLabel = "Cultivar name";
           showEditableBottomSheet(
-              context,
-              plant,
-              TextEditingController(text: '${plant.identification.target?.cultivar}'),
-              bottomSheetTitle,
-              bottomSheetEditLabel,
-              (String val) {
-                plant.identification.target =
-                    plant.identification.target?.copyWith(
-                        cultivar: val
-                    );
-                context
-                    .read<PlantBloc>()
-                    .add(UpdatePlantRequested(plant));
-                Navigator.of(context).pop();
-              },
+            context,
+            TextEditingController(
+                text: '${plant.identification.target?.cultivar}'),
+            bottomSheetTitle,
+            bottomSheetEditLabel,
+            EditableBottomSheetType.string,
+            (String val) {
+              plant.identification.target =
+                  plant.identification.target?.copyWith(cultivar: val);
+              context.read<PlantBloc>().add(UpdatePlantRequested(plant));
+              Navigator.of(context).pop();
+            },
           );
         },
       ),
