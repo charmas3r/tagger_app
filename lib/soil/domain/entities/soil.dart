@@ -8,8 +8,11 @@ class Soil extends Equatable {
   int id = 0;
   double ph = 7.0;
   String name = "";
+
   @Property(type: PropertyType.date)
   DateTime mixDate = DateTime.now();
+
+  @Backlink('soil')
   ToMany<SoilMedium> soilMediums = ToMany<SoilMedium>();
 
   @override

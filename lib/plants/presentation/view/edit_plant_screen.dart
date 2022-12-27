@@ -6,7 +6,8 @@ import 'package:tagger_app/plants/domain/entities/plant.dart';
 import 'package:tagger_app/plants/presentation/extensions/stateful_widget.dart';
 import 'package:tagger_app/plants/presentation/view/identification_settings_screen.dart';
 import 'package:tagger_app/plants/presentation/view/origin_settings_screen.dart';
-import 'package:tagger_app/plants/presentation/view/soil_settings_screen.dart';
+import 'package:tagger_app/resources/colors.dart';
+import 'package:tagger_app/soil/presentation/view/soil_settings_screen.dart';
 import '../../../main/presentation/navigation/model/routes.dart';
 import '../../domain/entities/identification.dart';
 import '../bloc/plant_bloc.dart';
@@ -47,9 +48,19 @@ class _EditPlantScreen extends State<EditPlantScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text("Edit Plant Screen"),
+      centerTitle: true,
+      title: Text(
+        "Edit your plant",
+        style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
       leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_circle_left,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
           onPressed: () {
             context.read<PlantBloc>().add(const FetchPlantsRequested());
             Navigator.of(context).pop();
@@ -71,8 +82,9 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('AlertDialog Title'),
-        content: const Text('AlertDialog description'),
+        title: const Text('Are you sure you want to delete this plant?'),
+        content: const Text(
+            'You will permanently lose all information saved with this plant.'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -140,7 +152,8 @@ class _EditPlantScreen extends State<EditPlantScreen> {
                 text: '${plant.identification.target?.nickname}'),
             bottomSheetTitle,
             bottomSheetEditLabel,
-            EditableBottomSheetType.string,
+            EditableBottomSheetVariableType.string,
+            EditableBottomSheetSavableType.saveOnClose,
             (String val) {
               plant.identification.target =
                   plant.identification.target?.copyWith(nickname: val);

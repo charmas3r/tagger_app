@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 import '../bloc/plant_bloc.dart';
 import '../widgets/plant_list_item.dart';
@@ -29,22 +31,52 @@ class _PlantsPageState extends State<PlantsPage> {
       builder: (context, state) {
         switch (state.status) {
           case PlantStatus.failure:
-            return const Center(child: Text('failed to fetch plants'));
+            return const Center(child: Text('failed to Fetch plants'));
           case PlantStatus.success:
             if (state.plants.isEmpty) {
               return const Center(child: Text('no plants'));
             }
             return RefreshIndicator(
-              onRefresh: () async {
-                context.read<PlantBloc>().add(const FetchPlantsRequested());
-              },
-              child: ListView.builder(
-                itemCount: state.plants.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return PlantListItem(plant: state.plants[index]);
+                onRefresh: () async {
+                  context.read<PlantBloc>().add(const FetchPlantsRequested());
                 },
-                controller: _scrollController,
-              ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child:                 Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Lottie.asset(
+                        'assets/json/TreeMainPageHeaderIcon.json',
+                        repeat: false,
+                        width: 60,
+                        height: 60,
+                      ),
+                      SizedBox(
+                        child: Text("How are you Evan,",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).colorScheme.secondary)),
+                      ),
+                      SizedBox(
+                        child: Text("Help us save the earth",
+                            style: GoogleFonts.merriweather(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w800,
+                                color: Theme.of(context).colorScheme.onPrimary)),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: state.plants.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return PlantListItem(plant: state.plants[index]);
+                          },
+                          controller: _scrollController,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
             );
           case PlantStatus.loading:
           case PlantStatus.initial:

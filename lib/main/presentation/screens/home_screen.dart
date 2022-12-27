@@ -65,11 +65,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildAddOptionsFab(int index) {
     if (index == 0) {
       return FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: () {
           Navigator.pushNamed(context, Routes.addPlantRoute);
         },
-        label: const Text('Add Plant'),
-        icon: const Icon(Icons.add),
+        label: Text(
+            'Add Plant',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondary,
+            )
+        ),
+        icon: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.onSecondary,
+      ),
       );
     }
     return const SizedBox();
@@ -130,16 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: GestureDetector(
-        onTap: () {
-          log("title was tapped");
-        },
-        child: const TextField(
-          decoration: InputDecoration.collapsed(
-            hintText: 'Search plants',
-          ),
-        ),
-      ),
     );
   }
 }

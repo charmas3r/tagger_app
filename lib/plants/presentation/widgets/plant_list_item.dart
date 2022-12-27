@@ -13,18 +13,31 @@ class PlantListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Material(
-      child: ListTile(
-        leading: Text('${plant.id}', style: textTheme.caption),
-        title: Text('${plant.identification.target?.nickname}'),
-        onTap: () {
-          log("trying to send ${plant.id}");
-          Navigator.pushNamed(context, Routes.editPlantRoute,
-              arguments: EditPlantScreenArguments(plant.id));
-        },
-        dense: true,
-      ),
-    );
+    return GestureDetector(
+        onTap: () => {
+              Navigator.pushNamed(context, Routes.editPlantRoute,
+                  arguments: EditPlantScreenArguments(plant.id))
+            },
+        child: Card(
+          color: Theme.of(context).colorScheme.tertiary,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 60,
+            child: Text('${plant.identification.target?.nickname}',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onTertiary)),
+          ),
+        ));
+
+    //   child: ListTile(
+    //     title: Text('${plant.identification.target?.nickname}',
+    //         style: TextStyle(color: Theme.of(context).colorScheme.onTertiary)),
+    //     onTap: () {
+    //       log("trying to send ${plant.id}");
+    //       Navigator.pushNamed(context, Routes.editPlantRoute,
+    //           arguments: EditPlantScreenArguments(plant.id));
+    //     },
+    //   ),
+    // );
   }
 }

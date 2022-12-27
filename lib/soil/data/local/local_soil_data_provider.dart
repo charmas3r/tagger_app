@@ -57,8 +57,14 @@ class LocalSoilDataProvider extends BaseSoilDataProvider {
     }
   }
 
-  Future<Result> addAll(List<Soil> plant) async {
-    return Result.success;
+  Future<Result> addAll(List<Soil> soils) async {
+    try {
+      final soilBox = database.store.box<Soil>();
+      soilBox.putMany(soils);
+      return Result.success;
+    } catch (e) {
+      return Result.failed;
+    }
   }
 
   Soil? getSoilByUniqueId(int soilId) {

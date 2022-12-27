@@ -291,13 +291,7 @@
           "type": 9
         }
       ],
-      "relations": [
-        {
-          "id": "3:3232237302920287481",
-          "name": "soilMediums",
-          "targetId": "11:3583429288166064697"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "10:7490017471890477341",
@@ -331,7 +325,7 @@
     },
     {
       "id": "11:3583429288166064697",
-      "lastPropertyId": "3:2797327148320488909",
+      "lastPropertyId": "4:5157460269871101813",
       "name": "SoilMedium",
       "properties": [
         {
@@ -349,13 +343,21 @@
           "id": "3:2797327148320488909",
           "name": "part",
           "type": 6
+        },
+        {
+          "id": "4:5157460269871101813",
+          "name": "soilId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:2715571539620484867",
+          "relationTarget": "Soil"
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "11:3583429288166064697",
-  "lastIndexId": "7:911694939341035075",
+  "lastIndexId": "8:2715571539620484867",
   "lastRelationId": "3:3232237302920287481",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -370,6 +372,8 @@
     3459616518871890027,
     6326617301396093534
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    3232237302920287481
+  ],
   "version": 1
 }

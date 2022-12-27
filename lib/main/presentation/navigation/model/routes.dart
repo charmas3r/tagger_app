@@ -6,6 +6,7 @@ class Routes {
   static const String historySettingsPlantRoute = "/history-settings-plant";
   static const String locationSettingsPlantRoute = "/location-settings-plant";
   static const String soilSettingsPlantRoute = "/soil-settings-plant";
+  static const String soilSettingsRoute = "/soil-settings";
   static const String soilCenterRoute = "/soil-center";
   static const String addSoilRoute = "/add-soil";
   static const String qrRoute = "/qr-code";

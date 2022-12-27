@@ -119,7 +119,8 @@ class _OriginSettingsScreen extends State<OriginSettingsScreen> {
             TextEditingController(text: '${plant.origin.target?.vendor}'),
             bottomSheetTitle,
             bottomSheetEditLabel,
-            EditableBottomSheetType.string,
+            EditableBottomSheetVariableType.string,
+            EditableBottomSheetSavableType.saveOnClose,
             (String val) {
               plant.origin.target = plant.origin.target?.copyWith(vendor: val);
               context.read<PlantBloc>().add(UpdatePlantRequested(plant));

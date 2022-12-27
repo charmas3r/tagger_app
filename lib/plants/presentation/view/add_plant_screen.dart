@@ -1,12 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tagger_app/common/ui/widgets/primary_button.dart';
 import 'package:tagger_app/plants/domain/entities/builder/decideous_flowering_tree_builder.dart';
 import 'package:tagger_app/plants/domain/entities/identification.dart';
 import 'package:tagger_app/plants/domain/entities/origin.dart';
 
-import '../../../soil/domain/entities/builder/soil_builder.dart';
-import '../../../soil/domain/entities/soil_medium.dart';
 import '../bloc/plant_bloc.dart';
 
 class AddPlantScreen extends StatefulWidget {
@@ -39,9 +37,19 @@ class _AddPlantScreen extends State<AddPlantScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: const Text("Add Plant Screen"),
+      centerTitle: true,
+      title: Text(
+        "Add a new plant",
+        style: TextStyle(
+          fontSize: 14,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
       leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_circle_left,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
           onPressed: () {
             context.read<PlantBloc>().add(const FetchPlantsRequested());
             Navigator.of(context).pop();
@@ -53,10 +61,31 @@ class _AddPlantScreen extends State<AddPlantScreen> {
     TextEditingController textEditingController,
     BuildContext context,
   ) {
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: _buildChildren(textEditingController, context),
-    );
+    return Stack(children: [
+      ListView(
+        padding: const EdgeInsets.all(8),
+        children: _buildChildren(textEditingController, context),
+      ),
+      PrimaryButton(
+        onTap: () {
+          final plant = DecideousFloweringTreeBuilder()
+              .setIdentification(Identification(
+                nickname: nickNameEditController.text,
+                cultivar: "NoId",
+                species: "Plumeria rubra",
+              ))
+              .setOrigin(Origin(
+                  isSeedling: false,
+                  vendor: "Unknown",
+                  acquireDate: DateTime.now()))
+              .create();
+          context.read<PlantBloc>().add(SavePlantRequested(plant));
+          context.read<PlantBloc>().add(const FetchPlantsRequested());
+          Navigator.pop(context);
+        },
+        buttonText: "Save Plant",
+      ),
+    ]);
   }
 
   List<Widget> _buildChildren(
@@ -77,27 +106,6 @@ class _AddPlantScreen extends State<AddPlantScreen> {
         onTap: () {
           _showEditPlantBottomSheet(textEditingController, context);
         },
-      ),
-      const SizedBox(height: 48),
-      ElevatedButton(
-        onPressed: () {
-          final plant = DecideousFloweringTreeBuilder()
-              .setIdentification(Identification(
-                nickname: nickNameEditController.text,
-                cultivar: "NoId",
-                species: "Plumeria rubra",
-              ))
-              .setOrigin(Origin(
-                  isSeedling: false,
-                  vendor: "Unknown",
-                  acquireDate: DateTime.now()
-               ))
-              .create();
-          context.read<PlantBloc>().add(SavePlantRequested(plant));
-          context.read<PlantBloc>().add(const FetchPlantsRequested());
-          Navigator.pop(context);
-        },
-        child: const Text("Save Plant"),
       )
     ];
   }

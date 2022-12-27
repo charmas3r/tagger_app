@@ -4,9 +4,14 @@ import 'package:tagger_app/utils/logging_utils.dart';
 import '../../domain/entities/plant.dart';
 import '../view/bottom_sheet_utils.dart';
 
-enum EditableBottomSheetType {
+enum EditableBottomSheetVariableType {
   string,
   double,
+}
+
+enum EditableBottomSheetSavableType {
+  saveOnClose,
+  saveAfterClose,
 }
 
 extension EditableBottomsheet on State<StatefulWidget> {
@@ -33,9 +38,13 @@ extension EditableBottomsheet on State<StatefulWidget> {
     TextEditingController textEditingController,
     String title,
     String label,
-    EditableBottomSheetType type,
+    EditableBottomSheetVariableType variableType,
+    EditableBottomSheetSavableType savableType,
     Function(String val) onTap,
   ) {
+    final buttonText = savableType == EditableBottomSheetSavableType.saveOnClose
+    ? "Save"
+    : "Continue";
     showModalBottomSheet<void>(
         context: pageContext,
         isScrollControlled: true,
@@ -68,12 +77,12 @@ extension EditableBottomsheet on State<StatefulWidget> {
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(
-                        child: const Text('Save'),
+                        child: Text(buttonText),
                         onPressed: () {
                           setModalState(() {
                             isValidInput = validateBottomSheetInput(
                                 textEditingController.text,
-                                type,
+                                variableType,
                             );
                             if (isValidInput) {
                               onTap(textEditingController.text);

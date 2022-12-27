@@ -27,6 +27,7 @@ class SoilRepository {
     }
     final List<Soil> localDataset = await localDataProvider.fetchSoils();
     if (localDataset.isEmpty) {
+      log("no local data - adding base blends");
       // fetch and store baseline soil blends (for now just hardcoded blends)
       // TODO [BE-PROJECT] add REST api for baseline blends
       final List<Soil> baselineDataset = baseSoilProvider.getBaseSoils();

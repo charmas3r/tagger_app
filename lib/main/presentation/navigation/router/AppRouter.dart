@@ -4,7 +4,7 @@ import 'package:tagger_app/plants/presentation/view/identification_settings_scre
 import 'package:tagger_app/plants/presentation/view/origin_settings_screen.dart';
 import 'package:tagger_app/soil/presentation/view/soil_list_screen.dart';
 import '../../../../plants/presentation/view/add_plant_screen.dart';
-import '../../../../plants/presentation/view/soil_settings_screen.dart';
+import '../../../../soil/presentation/view/soil_settings_screen.dart';
 import '../../../../soil/presentation/view/soil_builder_screen.dart';
 import '../../screens/home_screen.dart';
 import '../model/routes.dart';
@@ -49,6 +49,14 @@ class AppRouter {
             )
         );
       case Routes.soilSettingsPlantRoute:
+        final args = settings.arguments as SoilSettingsScreenArguments;
+        return MaterialPageRoute(
+            builder: (_) => SoilSettingsScreen(
+              title: "Soil Settings",
+              soilId: args.soilId,
+            )
+        );
+      case Routes.soilSettingsRoute:
         final args = settings.arguments as SoilSettingsScreenArguments;
         return MaterialPageRoute(
             builder: (_) => SoilSettingsScreen(

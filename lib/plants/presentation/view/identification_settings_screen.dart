@@ -149,7 +149,8 @@ class _IdentificationSettingsScreen
                 text: '${plant.identification.target?.cultivar}'),
             bottomSheetTitle,
             bottomSheetEditLabel,
-            EditableBottomSheetType.string,
+            EditableBottomSheetVariableType.string,
+            EditableBottomSheetSavableType.saveOnClose,
             (String val) {
               plant.identification.target =
                   plant.identification.target?.copyWith(cultivar: val);

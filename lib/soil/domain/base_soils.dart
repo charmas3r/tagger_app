@@ -10,6 +10,7 @@ class BaseSoilProvider {
     return [
       SoilBuilder()
           .setSoilName("David Konishi Plumeria Mix")
+          .setPh(6.5)
           .addSoilMedium(SoilMedium(medium: "Coir", part: 1))
           .addSoilMedium(SoilMedium(medium: "Perlite", part: 1))
           .create(),

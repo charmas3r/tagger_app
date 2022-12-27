@@ -4,9 +4,9 @@ import 'package:tagger_app/plants/presentation/extensions/stateful_widget.dart';
 
 bool validateBottomSheetInput(
   String input,
-  EditableBottomSheetType type,
+  EditableBottomSheetVariableType type,
 ) {
-  if (type == EditableBottomSheetType.double) {
+  if (type == EditableBottomSheetVariableType.double) {
     try {
       double.parse(input);
       return true;
