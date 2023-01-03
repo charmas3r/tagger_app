@@ -82,6 +82,9 @@ flutter:
   assets:
      - assets/
      - assets/json/
+     - assets/images/
+     - assets/icons/
+     - assets/images/tree.png
      - assets/images/superg.webp
      - assets/images/facebook.webp
 

@@ -42,6 +42,7 @@ class _AddPlantScreen extends State<AddPlantScreen> {
         "Add a new plant",
         style: TextStyle(
           fontSize: 14,
+          fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
@@ -117,6 +118,9 @@ class _AddPlantScreen extends State<AddPlantScreen> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(

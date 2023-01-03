@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+import 'package:tagger_app/main/presentation/navigation/model/screens.dart';
 import 'package:tagger_app/plants/domain/entities/plant.dart';
 import 'package:tagger_app/plants/presentation/extensions/stateful_widget.dart';
 import 'package:tagger_app/plants/presentation/view/identification_settings_screen.dart';
@@ -9,7 +11,6 @@ import 'package:tagger_app/plants/presentation/view/origin_settings_screen.dart'
 import 'package:tagger_app/resources/colors.dart';
 import 'package:tagger_app/soil/presentation/view/soil_settings_screen.dart';
 import '../../../main/presentation/navigation/model/routes.dart';
-import '../../domain/entities/identification.dart';
 import '../bloc/plant_bloc.dart';
 
 class EditPlantScreen extends StatefulWidget {
@@ -20,19 +21,41 @@ class EditPlantScreen extends StatefulWidget {
   final int plantId;
 
   @override
-  _EditPlantScreen createState() => _EditPlantScreen(plantId);
+  EditPlantScreenState createState() => EditPlantScreenState(plantId);
 }
 
-class _EditPlantScreen extends State<EditPlantScreen> {
-  final nickNameEditController = TextEditingController(text: "Plant nickname");
+class EditPlantScreenState extends State<EditPlantScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  late TextEditingController _nickNameEditController;
+
+  int _selectedIndex = Screens.activityPlants;
   final int plantId;
 
-  _EditPlantScreen(this.plantId);
+  final _tabs = [
+    const Tab(text: 'Activity'),
+    const Tab(text: 'Tasks'),
+    const Tab(text: 'General'),
+  ];
+
+  EditPlantScreenState(this.plantId);
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _nickNameEditController = TextEditingController(text: "Plant nickname");
+  }
 
   @override
   void dispose() {
-    nickNameEditController.dispose();
+    _tabController.dispose();
+    _nickNameEditController.dispose();
     super.dispose();
+  }
+
+  void handleClick() {
+    log("was clicked");
   }
 
   @override
@@ -42,7 +65,7 @@ class _EditPlantScreen extends State<EditPlantScreen> {
         onWillPop: () async => false,
         child: Scaffold(
           appBar: _buildAppBar(context),
-          body: _buildBody(nickNameEditController, context),
+          body: _buildBody(_nickNameEditController, context),
         ));
   }
 
@@ -52,8 +75,9 @@ class _EditPlantScreen extends State<EditPlantScreen> {
       title: Text(
         "Edit your plant",
         style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).colorScheme.onPrimary,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       leading: IconButton(
@@ -66,16 +90,31 @@ class _EditPlantScreen extends State<EditPlantScreen> {
             Navigator.of(context).pop();
           }),
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(
-            Icons.delete,
-          ),
-          onPressed: () {
-            _showAlertDialog(plantId, context);
+        PopupMenuButton<String>(
+          // color: ThemeColors.alabaster.shade500,
+          elevation: 24,
+          onSelected: _handleMenuOveflowClick,
+          itemBuilder: (BuildContext context) {
+            return {'Delete'}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
           },
         ),
       ],
     );
+  }
+
+  void _handleMenuOveflowClick(String value) {
+    switch (value) {
+      case 'Delete':
+        {
+          _showAlertDialog(plantId, context);
+          break;
+        }
+    }
   }
 
   void _showAlertDialog(int plantId, BuildContext pageContext) {
@@ -88,7 +127,9 @@ class _EditPlantScreen extends State<EditPlantScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
+            child: Text('Cancel',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.error)),
           ),
           TextButton(
             onPressed: () {
@@ -97,7 +138,10 @@ class _EditPlantScreen extends State<EditPlantScreen> {
               Navigator.pop(context, 'OK');
               Navigator.pop(pageContext);
             },
-            child: const Text('Ok'),
+            child: Text(
+              'Ok',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
           ),
         ],
       ),
@@ -118,10 +162,71 @@ class _EditPlantScreen extends State<EditPlantScreen> {
         case PlantStatus.failure:
           return const Center(child: Text('failed to fetch plant'));
         case PlantStatus.success:
-          return ListView(
-            padding: const EdgeInsets.all(8),
-            children: _buildChildren(
-                textEditingController, context, state.plants.first),
+          return Column(
+            children: [
+              const SizedBox(height: 16),
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  const Positioned(
+                    top: 0,
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircleAvatar(
+                          radius: 48, // Image radius
+                          backgroundImage:
+                          AssetImage('assets/images/plumeria.webp')),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 76,
+                    child: Text(textEditingController.text)
+                  ),
+                  Lottie.asset(
+                    'assets/json/AlabasterGrass.json',
+                    repeat: true,
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: kToolbarHeight - 8.0,
+                        decoration: BoxDecoration(
+                          color: ThemeColors.alabaster,
+                          borderRadius: BorderRadius.circular(48.0),
+                        ),
+                        child: TabBar(
+                          onTap: (index) {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                          },
+                          controller: _tabController,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(48.0),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          labelColor: Theme.of(context).colorScheme.onPrimary,
+                          unselectedLabelColor:
+                              Theme.of(context).colorScheme.secondary,
+                          tabs: _tabs,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildTabView(
+                          _selectedIndex, state.plants, textEditingController)
+                    ],
+                  ),
+                ),
+              )
+            ],
           );
         case PlantStatus.loading:
         case PlantStatus.initial:
@@ -130,37 +235,172 @@ class _EditPlantScreen extends State<EditPlantScreen> {
     });
   }
 
-  List<Widget> _buildChildren(
+  Widget _buildTabView(
+    int index,
+    List<Plant> plants,
+    TextEditingController nickNameController,
+  ) {
+    if (index == Screens.activityPlants) {
+      return Column(children: [
+        _buildShadowItem(),
+        Text("Activity Plants"),
+      ]);
+    } else if (index == Screens.tasksPlants) {
+      return Expanded(
+          child: Container(
+        color: Theme.of(context).colorScheme.primary,
+        child: ListView(
+          children:
+              _buildTasksChildren(nickNameController, context, plants.first),
+        ),
+      ));
+    } else {
+      return Expanded(
+          child: Container(
+        color: Theme.of(context).colorScheme.primary,
+        child: ListView(
+          children:
+              _buildSettingsChildren(nickNameController, context, plants.first),
+        ),
+      ));
+    }
+  }
+
+  Widget _buildShadowItem() {
+    return Container(
+        height: 4,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ));
+  }
+
+  List<Widget> _buildTasksChildren(
     TextEditingController textEditingController,
     BuildContext context,
     Plant plant,
   ) {
     return [
-      const ListTile(
-        title: Text("General"),
+      _buildShadowItem(),
+      ListTile(
+        title: Text(
+          "CARE TASK SETTINGS",
+          style: TextStyle(color: Colors.grey.shade500),
+        ),
         dense: true,
       ),
       ListTile(
-        title: Text(textEditingController.text),
-        trailing: const Icon(Icons.edit),
+        title: const Text("Watering Schedule"),
+        trailing: const Icon(Icons.chevron_right),
         onTap: () {
-          String bottomSheetTitle = "Choose a nickname";
-          String bottomSheetEditLabel = "Plant nickname";
-          showEditableBottomSheet(
-            context,
-            TextEditingController(
-                text: '${plant.identification.target?.nickname}'),
-            bottomSheetTitle,
-            bottomSheetEditLabel,
-            EditableBottomSheetVariableType.string,
-            EditableBottomSheetSavableType.saveOnClose,
-            (String val) {
-              plant.identification.target =
-                  plant.identification.target?.copyWith(nickname: val);
-              context.read<PlantBloc>().add(UpdatePlantRequested(plant));
-              Navigator.of(context).pop();
-            },
-          );
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Fertilizer Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Soil Changing Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.soilSettingsPlantRoute,
+              arguments: SoilSettingsScreenArguments(plant.soilId));
+        },
+      ),
+      ListTile(
+        title: const Text("Pruning Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Misting Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Custom Schedule"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+    ];
+  }
+
+  List<Widget> _buildSettingsChildren(
+    TextEditingController textEditingController,
+    BuildContext context,
+    Plant plant,
+  ) {
+    return [
+      _buildShadowItem(),
+      ListTile(
+        title: Text(
+          "GENERAL PLANT SETTINGS",
+          style: TextStyle(color: Colors.grey.shade500),
+        ),
+        dense: true,
+      ),
+      ListTile(
+          title: const Text("Edit plant name"),
+          trailing: const Icon(Icons.edit),
+          onTap: () {
+            String bottomSheetTitle = "Choose a nickname";
+            String bottomSheetEditLabel = "Plant nickname";
+            showEditableBottomSheet(
+              context,
+              TextEditingController(
+                  text: '${plant.identification.target?.nickname}'),
+              bottomSheetTitle,
+              bottomSheetEditLabel,
+              EditableBottomSheetVariableType.string,
+              EditableBottomSheetSavableType.saveOnClose,
+              (String val) {
+                plant.identification.target =
+                    plant.identification.target?.copyWith(nickname: val);
+                context.read<PlantBloc>().add(UpdatePlantRequested(plant));
+                Navigator.of(context).pop();
+              },
+            );
+          }),
+      SwitchListTile(
+        title: const Text("Mute notifications"),
+        value: false,
+        onChanged:(bool? value) { },
+      ),
+      ListTile(
+        title: const Text("Gallery"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
+        },
+      ),
+      ListTile(
+        title: const Text("Label settings"),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
+              arguments: OriginSettingsScreenArguments(plant.id));
         },
       ),
       ListTile(
@@ -181,42 +421,6 @@ class _EditPlantScreen extends State<EditPlantScreen> {
       ),
       ListTile(
         title: const Text("Location"),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
-              arguments: OriginSettingsScreenArguments(plant.id));
-        },
-      ),
-      const ListTile(
-        title: Text("Care"),
-        dense: true,
-      ),
-      ListTile(
-        title: const Text("Watering Schedule"),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
-              arguments: OriginSettingsScreenArguments(plant.id));
-        },
-      ),
-      ListTile(
-        title: const Text("Fertilizer Schedule"),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,
-              arguments: OriginSettingsScreenArguments(plant.id));
-        },
-      ),
-      ListTile(
-        title: const Text("Soil"),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.pushNamed(context, Routes.soilSettingsPlantRoute,
-              arguments: SoilSettingsScreenArguments(plant.soilId));
-        },
-      ),
-      ListTile(
-        title: const Text("Container"),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
           Navigator.pushNamed(context, Routes.locationSettingsPlantRoute,

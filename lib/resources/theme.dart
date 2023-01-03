@@ -27,14 +27,36 @@ class PlantTheme {
         surface: Colors.white,
         onSurface: ThemeColors.olivine,
       ),
+      inputDecorationTheme: const InputDecorationTheme(
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: ThemeColors.olivine)
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: ThemeColors.olivine),
+        ),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: ThemeColors.olivine),
+        ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: ThemeColors.olivine,
+        selectionHandleColor: ThemeColors.olivine,
+        selectionColor: ThemeColors.olivine.shade200,
+      ),
       buttonTheme: ButtonThemeData(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
         buttonColor: ThemeColors.olivine,
       ),
-      appBarTheme: const AppBarTheme(
-        elevation: 8
-      ),
+      navigationBarTheme: NavigationBarThemeData(
+          indicatorColor: ThemeColors.alabaster,
+          iconTheme: MaterialStateProperty.resolveWith((states) {
+            return IconThemeData(color: ThemeColors.darkMossGreen);
+          }),
+          labelTextStyle: MaterialStateProperty.resolveWith((states) {
+            return TextStyle(fontSize: 14, color: ThemeColors.darkMossGreen);
+      })),
+      appBarTheme: const AppBarTheme(elevation: 8),
     );
   }
 }

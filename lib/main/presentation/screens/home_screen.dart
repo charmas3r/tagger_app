@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tagger_app/plants/presentation/view/dashboard_page.dart';
 import 'package:tagger_app/plants/presentation/view/plants_page.dart';
-import 'package:tagger_app/utils/logging_utils.dart';
 
 import '../../../qr/presentation/pages/qr_scanning_page.dart';
 import '../navigation/model/pages.dart';
 import '../navigation/model/routes.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.title})
-      : super(key: key);
+  const HomeScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -20,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = Pages.homePage;
 
   static const List<Widget> _widgetOptions = <Widget>[
+    DashboardPage(),
     PlantsPage(),
     QRScanningPage(),
   ];
@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      drawer: _buildAppDrawer(),
       floatingActionButton: _buildAddOptionsFab(_selectedIndex),
       body: _buildBody(_selectedIndex),
       bottomNavigationBar: _buildBottomNavBar(),
@@ -45,8 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
       selectedIndex: _selectedIndex,
       destinations: const <Widget>[
         NavigationDestination(
+          icon: Icon(Icons.dashboard_customize_rounded),
+          label: 'Dashboard',
+        ),
+        NavigationDestination(
           icon: Icon(Icons.forest),
-          label: 'Plants',
+          label: 'My plants',
         ),
         NavigationDestination(
           icon: Icon(Icons.qr_code),
@@ -63,82 +66,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAddOptionsFab(int index) {
-    if (index == 0) {
+    if (index == 1) {
       return FloatingActionButton.extended(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: () {
           Navigator.pushNamed(context, Routes.addPlantRoute);
         },
         label: Text(
-            'Add Plant',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSecondary,
-            )
+          'Add plant',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         icon: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.onSecondary,
-      ),
+          Icons.add,
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
       );
     }
     return const SizedBox();
   }
 
-  Widget _buildAppDrawer() {
-    return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Text(
-                'Drawer Header',
-            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),),
-          ),
-          ListTile(
-            title: const Text('Plant Center'),
-            selected: true,
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Soil Center'),
-            onTap: () {
-              Navigator.pushNamed(context, Routes.soilCenterRoute);
-            },
-          ),
-          ListTile(
-            title: const Text('Identification Center'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Ideas Center'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Settings'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      automaticallyImplyLeading: false,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Icon(
+            Icons.settings,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        )
+      ],
     );
   }
 }

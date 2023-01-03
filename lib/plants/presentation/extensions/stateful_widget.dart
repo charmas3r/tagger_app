@@ -48,6 +48,9 @@ extension EditableBottomsheet on State<StatefulWidget> {
     showModalBottomSheet<void>(
         context: pageContext,
         isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        ),
         builder: (BuildContext context) {
           var isValidInput = true;
           return StatefulBuilder(builder: (BuildContext context,
@@ -77,7 +80,11 @@ extension EditableBottomsheet on State<StatefulWidget> {
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(
-                        child: Text(buttonText),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.secondary
+                          )
+                        ),
                         onPressed: () {
                           setModalState(() {
                             isValidInput = validateBottomSheetInput(
@@ -89,7 +96,8 @@ extension EditableBottomsheet on State<StatefulWidget> {
                             }
                           });
 
-                        }),
+                        },
+                        child: Text(buttonText, style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),)),
                   ],
                 ),
               ),
